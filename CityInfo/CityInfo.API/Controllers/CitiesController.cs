@@ -2,6 +2,7 @@
 using CityInfo.API.Entities;
 using CityInfo.API.Interfaces;
 using CityInfo.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 namespace CityInfo.API.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/cities")]
     public class CitiesController : ControllerBase
     {
