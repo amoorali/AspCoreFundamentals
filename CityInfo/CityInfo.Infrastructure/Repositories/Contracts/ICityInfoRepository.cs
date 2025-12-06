@@ -1,5 +1,5 @@
 ﻿using CityInfo.API.Entities;
-using CityInfo.API.Services;
+using CityInfo.Application.Services.Implementations;
 
 namespace CityInfo.API.Interfaces
 {

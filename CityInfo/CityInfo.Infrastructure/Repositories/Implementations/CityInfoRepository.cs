@@ -4,7 +4,7 @@ using CityInfo.API.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
-namespace CityInfo.API.Services
+namespace CityInfo.Application.Services.Implementations
 {
     public class CityInfoRepository : ICityInfoRepository
     {
@@ -28,17 +28,17 @@ namespace CityInfo.API.Services
             // collection to start from
             var collection = _context.Cities as IQueryable<City>;
 
-            if (!String.IsNullOrEmpty(name))
+            if (!string.IsNullOrEmpty(name))
             {
                 name = name.Trim();
                 collection = collection.Where(c => c.Name == name);
             }
 
-            if (!String.IsNullOrWhiteSpace(searchQuery))
+            if (!string.IsNullOrWhiteSpace(searchQuery))
             {
                 searchQuery = searchQuery.Trim();
                 collection = collection.Where(c => c.Name.Contains(searchQuery)
-                || (!String.IsNullOrEmpty(c.Description) && c.Description.Contains(searchQuery)));
+                || !string.IsNullOrEmpty(c.Description) && c.Description.Contains(searchQuery));
             }
 
             var totalItemCount = await collection.CountAsync();
@@ -110,7 +110,7 @@ namespace CityInfo.API.Services
 
         public async Task<bool> SaveChangesAsync()
         {
-            return (await _context.SaveChangesAsync() >= 0);
+            return await _context.SaveChangesAsync() >= 0;
         }
     }
 }

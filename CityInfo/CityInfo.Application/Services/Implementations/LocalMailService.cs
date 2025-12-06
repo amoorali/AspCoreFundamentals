@@ -1,11 +1,11 @@
 ﻿using CityInfo.API.Interfaces;
 
-namespace CityInfo.API.Services
+namespace CityInfo.Application.Services.Implementations
 {
     public class LocalMailService : IMailService
     {
-        private string _mailTo = String.Empty;
-        private string _mailFrom = String.Empty;
+        private string _mailTo = string.Empty;
+        private string _mailFrom = string.Empty;
 
         public LocalMailService(IConfiguration configuration)
         {
