@@ -1,13 +1,15 @@
 ﻿using AutoMapper;
+using CityInfo.Application.DTOs;
+using CityInfo.Domain.Entities;
 
-namespace CityInfo.API.Profiles
+namespace CityInfo.APIs.Profiles
 {
     public class CityProfile : Profile
     {
         public CityProfile()
         {
-            CreateMap<Entities.City, Models.CityWithoutPointsOfInterestDto>();
-            CreateMap<Entities.City, Models.CityDto>();
+            CreateMap<City, CityWithoutPointsOfInterestDto>();
+            CreateMap<City, CityDto>();
         }
     }
 }

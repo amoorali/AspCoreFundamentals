@@ -2,7 +2,7 @@
 using CityInfo.API.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace CityInfo.API.DbContexts
+namespace CityInfo.Infrastructure.DbContexts
 {
     public class CityInfoContext : DbContext
     {

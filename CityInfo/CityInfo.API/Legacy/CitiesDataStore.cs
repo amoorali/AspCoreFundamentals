@@ -1,6 +1,6 @@
-﻿using CityInfo.API.Models;
+﻿using CityInfo.Application.DTOs;
 
-namespace CityInfo.API
+namespace CityInfo.APIs.Legacy
 {
     public class CitiesDataStore
     {

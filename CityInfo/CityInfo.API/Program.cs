@@ -1,10 +1,13 @@
 
 using Asp.Versioning;
-using CityInfo.API.DbContexts;
-using CityInfo.API.Interfaces;
-using CityInfo.API.Services;
+using CityInfo.APIs.Legacy;
+using CityInfo.Application.Services.Contracts;
+using CityInfo.Application.Services.Implementations;
+using CityInfo.Infrastructure.DbContexts;
+using CityInfo.Infrastructure.DbContexts;
+using CityInfo.Infrastructure.Repositories.Contracts;
+using CityInfo.Infrastructure.Repositories.Implementations;
 using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Reflection;

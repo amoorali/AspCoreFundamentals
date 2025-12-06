@@ -1,4 +1,4 @@
-﻿namespace CityInfo.API.Models
+﻿namespace CityInfo.Application.DTOs
 {
     /// <summary>
     /// A city without points of interest

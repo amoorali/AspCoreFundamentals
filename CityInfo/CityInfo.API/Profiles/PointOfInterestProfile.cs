@@ -1,15 +1,17 @@
 ﻿using AutoMapper;
+using CityInfo.Application.DTOs;
+using CityInfo.Domain.Entities;
 
-namespace CityInfo.API.Profiles
+namespace CityInfo.APIs.Profiles
 {
     public class PointOfInterestProfile : Profile
     {
         public PointOfInterestProfile()
         {
-            CreateMap<Entities.PointOfInterest, Models.PointOfInterestDto>();
-            CreateMap<Models.PointOfInterestForCreationDto, Entities.PointOfInterest>();
-            CreateMap<Models.PointOfInterestForUpdateDto, Entities.PointOfInterest>();
-            CreateMap<Entities.PointOfInterest, Models.PointOfInterestForUpdateDto>();
+            CreateMap<PointOfInterest, PointOfInterestDto>();
+            CreateMap<PointOfInterestForCreationDto, PointOfInterest>();
+            CreateMap<PointOfInterestForUpdateDto, PointOfInterest>();
+            CreateMap<PointOfInterest, PointOfInterestForUpdateDto>();
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using CityInfo.API.Entities;
-using CityInfo.Application.Services.Implementations;
+using CityInfo.Application.Common;
 
-namespace CityInfo.API.Interfaces
+namespace CityInfo.Infrastructure.Repositories.Contracts
 {
     public interface ICityInfoRepository
     {

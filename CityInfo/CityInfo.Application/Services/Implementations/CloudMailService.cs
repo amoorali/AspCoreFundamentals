@@ -1,4 +1,4 @@
-﻿using CityInfo.API.Interfaces;
+﻿using CityInfo.Application.Services.Contracts;
 
 namespace CityInfo.Application.Services.Implementations
 {

@@ -1,10 +1,11 @@
-﻿using CityInfo.API.DbContexts;
-using CityInfo.API.Entities;
-using CityInfo.API.Interfaces;
+﻿using CityInfo.API.Entities;
+using CityInfo.Application.Common;
+using CityInfo.Infrastructure.DbContexts;
+using CityInfo.Infrastructure.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
-namespace CityInfo.Application.Services.Implementations
+namespace CityInfo.Infrastructure.Repositories.Implementations
 {
     public class CityInfoRepository : ICityInfoRepository
     {

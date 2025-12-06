@@ -1,8 +1,8 @@
 ﻿using Asp.Versioning;
 using AutoMapper;
-using CityInfo.API.Entities;
-using CityInfo.API.Interfaces;
-using CityInfo.API.Models;
+using CityInfo.Domain.Entities;
+using CityInfo.Application.DTOs;
+using CityInfo.Infrastructure.Repositories.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
