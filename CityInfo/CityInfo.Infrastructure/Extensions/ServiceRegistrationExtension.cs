@@ -11,7 +11,7 @@ namespace CityInfo.Infrastructure.Extensions
 {
     public static class ServiceRegistrationExtension
     {
-        public static void AddInfrastructureLayer(
+        public static void ConfigureInfrastructureLayer(
             this IServiceCollection services,
             IConfiguration configuration)
         {
@@ -32,8 +32,6 @@ namespace CityInfo.Infrastructure.Extensions
             services.AddTransient<IMailService, CloudMailService>();
 #endif
             #endregion
-
-            return services;
         }
     }
 }
