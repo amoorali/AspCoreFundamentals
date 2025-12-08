@@ -9,12 +9,12 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace CityInfo.APIs.Controllers
+namespace CityInfo.APIs.Controllers.V1
 {
-    [Route("api/v{version:apiVersion}/cities/{cityId}/pointsofinterest")]
-    [Authorize(Policy = "MustBeFromAntwerp")]
     [ApiController]
+    [Authorize(Policy = "MustBeFromAntwerp")]
     [ApiVersion(1)]
+    [Route("api/v{version:apiVersion}/cities/{cityId}/pointsofinterest")]
     public class PointsOfInterestController : ControllerBase
     {
         #region [ Fields ]

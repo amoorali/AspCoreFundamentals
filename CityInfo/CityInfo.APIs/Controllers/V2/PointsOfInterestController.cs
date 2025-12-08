@@ -1,0 +1,86 @@
+﻿using Asp.Versioning;
+using AutoMapper;
+using CityInfo.Application.DTOs;
+using CityInfo.Application.Services.Contracts;
+using CityInfo.Infrastructure.Repositories.Contracts;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+
+namespace CityInfo.APIs.Controllers.V2
+{
+    [ApiController]
+    [Authorize(Policy = "MustBeFromAntwerp")]
+    [ApiVersion(2)]
+    [Route("api/v{version:apiVersion}/cities/{cityId}/pointsofinterest")]
+    public class PointsOfInterestController : ControllerBase
+    {
+        #region [ Fields ]
+        private readonly ILogger<PointsOfInterestController> _logger;
+        private readonly IMailService _mailService;
+        private readonly ICityInfoRepository _cityInfoRepository;
+        private readonly IMapper _mapper;
+        #endregion
+
+        #region [ Constructure ]
+        public PointsOfInterestController(ILogger<PointsOfInterestController> logger,
+            IMailService mailService,
+            ICityInfoRepository cityInfoRepository,
+            IMapper mapper)
+        {
+            _logger = logger ??
+                throw new ArgumentNullException(nameof(logger));
+            _mailService = mailService ??
+                throw new ArgumentNullException(nameof(mailService));
+            _cityInfoRepository = cityInfoRepository ??
+                throw new ArgumentNullException(nameof(cityInfoRepository));
+            _mapper = mapper ??
+                throw new ArgumentNullException(nameof(mapper));
+        }
+        #endregion
+
+        #region [ GET Methods ]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PointOfInterestDto>>> GetPointsOfInterestAsync(int cityId)
+        {
+            var cityName = User.Claims.First(c => c.Type == "city").Value;
+
+            if (!await _cityInfoRepository.CityNameMatchesCityIdAsync(cityName, cityId))
+                return Forbid();
+
+            if (!await _cityInfoRepository.CityExistsAsync(cityId))
+            {
+                _logger.LogInformation($"City with id {cityId} wasn't found when accessing points of interest");
+
+                return NotFound("City not found");
+            }
+
+            var pointsOfInterest = await _cityInfoRepository
+                .GetPointsOfInterestForCityAsync(cityId);
+
+            return Ok(_mapper.Map<IEnumerable<PointOfInterestDto>>(pointsOfInterest));
+            
+        }
+
+        [HttpGet("{pointOfInterestId}", Name = "GetPointOfInterest")]
+        public async Task<ActionResult<PointOfInterestDto>> GetPointOfInterestAsync(int cityId, int pointOfInterestId)
+        {
+            if (!await _cityInfoRepository.CityExistsAsync(cityId))
+            {
+                _logger.LogInformation($"City with id {cityId} wasn't found when accessing points of interest");
+
+                return NotFound("City not found");
+            }
+
+            var pointOfInterest = await _cityInfoRepository.GetPointOfInterestForCityAsync(cityId, pointOfInterestId);
+
+            if (pointOfInterest == null)
+                return NotFound("City not found");
+
+            return Ok(_mapper.Map<PointOfInterestDto>(pointOfInterest));
+        }
+        #endregion
+    }
+}

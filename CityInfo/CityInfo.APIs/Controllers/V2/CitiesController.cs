@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
-namespace CityInfo.APIs.Controllers
+namespace CityInfo.APIs.Controllers.V2
 {
     [ApiController]
     [Authorize]
+    [ApiVersion(2)]
     [Route("api/v{version:apiVersion}/cities")]
-    [ApiVersion(1)]
     public class CitiesController : ControllerBase
     {
         #region [ Fields ]

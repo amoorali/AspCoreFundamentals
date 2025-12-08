@@ -26,6 +26,11 @@ namespace CityInfo.APIs.Extensions
                 options.SwaggerDoc(description.GroupName, CreateVersionInfo(description));
             }
         }
+
+        public void Configure(string name, SwaggerGenOptions options)
+        {
+            Configure(options);
+        }
         #endregion
 
         #region [ Private ]
