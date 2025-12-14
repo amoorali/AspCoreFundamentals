@@ -1,5 +1,5 @@
 ﻿using Asp.Versioning;
-using AutoMapper;
+using MapsterMapper;
 using CityInfo.Domain.Entities;
 using CityInfo.Application.DTOs;
 using CityInfo.Infrastructure.Repositories.Contracts;
@@ -27,7 +27,7 @@ namespace CityInfo.APIs.Controllers.V2
         {
             _cityRepostory = cityRepostory ??
                 throw new ArgumentNullException(nameof(cityRepostory));
-            _mapper = mapper 
+            _mapper = mapper
                 ?? throw new ArgumentNullException(nameof(mapper));
         }
         #endregion

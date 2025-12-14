@@ -1,13 +1,10 @@
 ﻿using Asp.Versioning;
-using AutoMapper;
+using MapsterMapper;
 using CityInfo.Application.DTOs;
-using CityInfo.Application.Services.Contracts;
 using CityInfo.Infrastructure.Repositories.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace CityInfo.APIs.Controllers.V2
 {
