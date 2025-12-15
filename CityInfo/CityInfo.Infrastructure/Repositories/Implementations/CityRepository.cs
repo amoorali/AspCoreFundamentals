@@ -9,8 +9,8 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
     public class CityRepository : Repository<City>, ICityRepository
     {
         #region [ Constructor ]
-        public CityRepository(CityInfoContext _context)
-            : base(_context)
+        public CityRepository(CityInfoContext context)
+            : base(context)
         {
         }
         #endregion
@@ -18,7 +18,7 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
         #region [ City Methods ]
         public async Task<IEnumerable<City>> GetCitiesAsync()
         {
-            return await _context.Cities
+            return await Context.Cities
                 .OrderBy(c => c.Name)
                 .ToListAsync();
         }
@@ -27,7 +27,7 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
             string? name, string? searchQuery, int pageNumber, int pageSize)
         {
             // collection to start from
-            var collection = _context.Cities.AsQueryable();
+            var collection = Context.Cities.AsQueryable();
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -60,13 +60,13 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
         {
             if (includePointsOfInterest)
             {
-                return await _context.Cities
+                return await Context.Cities
                     .Include(c => c.PointsOfInterest)
                     .Where(c => c.Id == cityId)
                     .FirstOrDefaultAsync();
             }
 
-            return await _context.Cities
+            return await Context.Cities
                 .Where(c => c.Id == cityId)
                 .FirstOrDefaultAsync();
         }
@@ -81,15 +81,21 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
 
         public async Task<bool> CityExistsAsync(int cityId)
         {
-            return await _context.Cities.AnyAsync(c => c.Id == cityId);
+            return await Context.Cities.AnyAsync(c => c.Id == cityId);
         }
 
         #region [ Bool Expression Methods ]
         public async Task<bool> CityNameMatchesCityIdAsync(string? cityName, int cityId)
         {
-            return await _context.Cities.AnyAsync(c => c.Id == cityId && c.Name == cityName);
+            return await Context.Cities.AnyAsync(c => c.Id == cityId && c.Name == cityName);
         }
         #endregion
+
         #endregion
+
+        public CityInfoContext CityInfoContext
+        {
+            get { return Context as CityInfoContext; }
+        }
     }
 }

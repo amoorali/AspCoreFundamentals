@@ -5,10 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CityInfo.Infrastructure.Repositories.Implementations
 {
-    public class PointOfInterestRepository : Repository, IPointOfInterestRepository
+    public class PointOfInterestRepository : Repository<PointOfInterest>, IPointOfInterestRepository
     {
         #region [ Constructor ]
-        public PointOfInterestRepository(CityInfoContext _context) : base(_context)
+        public PointOfInterestRepository(CityInfoContext context)
+            : base(context)
         {
         }
         #endregion
@@ -16,21 +17,21 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
         #region [ PointOfInterest Methods ]
         public async Task<PointOfInterest?> GetPointOfInterestForCityAsync(int cityId, int pointOfInterestId)
         {
-            return await _context.PointsOfInterest
+            return await Context.PointsOfInterest
                 .Where(p => p.CityId == cityId && p.Id == pointOfInterestId)
                 .FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<PointOfInterest>> GetPointsOfInterestForCityAsync(int cityId)
         {
-            return await _context.PointsOfInterest
+            return await Context.PointsOfInterest
                 .Where(p => p.CityId == cityId)
                 .ToListAsync();
         }
 
         public void DeletePointOfInterest(PointOfInterest pointOfInterest)
         {
-            _context.PointsOfInterest.Remove(pointOfInterest);
+            Context.PointsOfInterest.Remove(pointOfInterest);
         }
         #endregion
     }
