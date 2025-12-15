@@ -2,7 +2,7 @@
 
 namespace CityInfo.Infrastructure.Repositories.Contracts
 {
-    public interface IPointOfInterestRepository
+    public interface IPointOfInterestRepository : IRepository<PointOfInterest>
     {
         Task<IEnumerable<PointOfInterest>> GetPointsOfInterestForCityAsync(int cityId);
         Task<PointOfInterest?> GetPointOfInterestForCityAsync(int cityId, int pointOfInterestId);

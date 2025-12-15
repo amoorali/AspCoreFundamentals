@@ -3,7 +3,7 @@ using CityInfo.Domain.Entities;
 
 namespace CityInfo.Infrastructure.Repositories.Contracts
 {
-    public interface ICityRepository
+    public interface ICityRepository : IRepository<City>
     {
         Task<IEnumerable<City>> GetCitiesAsync();
         Task<(IEnumerable<City>, PaginationMetadata)> GetCitiesAsync(string? name, string? searchQuery, int pageNumber, int pageSize);

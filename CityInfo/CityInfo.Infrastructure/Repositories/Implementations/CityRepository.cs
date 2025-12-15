@@ -6,10 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CityInfo.Infrastructure.Repositories.Implementations
 {
-    public class CityRepository : GeneralRepository, ICityRepository
+    public class CityRepository : Repository<City>, ICityRepository
     {
         #region [ Constructor ]
-        public CityRepository(CityInfoContext _context) : base(_context)
+        public CityRepository(CityInfoContext _context)
+            : base(_context)
         {
         }
         #endregion
