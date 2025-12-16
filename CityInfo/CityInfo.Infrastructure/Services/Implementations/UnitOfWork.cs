@@ -16,7 +16,8 @@ namespace CityInfo.Infrastructure.Services.Implementations
         #region [ Constructor ]
         public UnitOfWork(CityInfoContext context)
         {
-            _context = context;
+            _context = context ?? 
+                throw new ArgumentNullException(nameof(context));
             Cities = new CityRepository(_context);
             PointsOfInterest = new PointOfInterestRepository(_context);
         }
@@ -28,7 +29,7 @@ namespace CityInfo.Infrastructure.Services.Implementations
 
         public void Dispose()
         {
-            _context.DisposeAsync();
+            _context.Dispose();
         }
         #endregion
     }
