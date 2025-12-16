@@ -18,7 +18,7 @@ namespace CityInfo.Application.Extensions
             #region [ MediatR ]
             services.AddMediatR(config =>
             {
-                config.RegisterServicesFromAssembly(typeof(ServiceRegistrasionExtension).Assembly)
+                config.RegisterServicesFromAssembly(typeof(ServiceRegistrasionExtension).Assembly);
             });
             #endregion
         }
