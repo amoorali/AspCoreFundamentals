@@ -15,6 +15,12 @@ namespace CityInfo.Application.Extensions
             services.AddMapster();
             #endregion
 
+            #region [ MediatR ]
+            services.AddMediatR(config =>
+            {
+                config.RegisterServicesFromAssembly(typeof(ServiceRegistrasionExtension).Assembly)
+            });
+            #endregion
         }
     }
 }
