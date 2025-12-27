@@ -1,5 +1,8 @@
 ﻿using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
+using CityInfo.Application.Validation.PointOfInterest;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
@@ -118,6 +121,11 @@ namespace CityInfo.APIs.Extensions
                     }
                 };
             });
+            #endregion
+
+            #region [ FluentValidation ]
+            services.AddFluentValidationAutoValidation();
+            services.AddValidatorsFromAssemblyContaining<PointOfInterestForUpdateDtoValidator>();
             #endregion
 
             services.AddSingleton<FileExtensionContentTypeProvider>();
