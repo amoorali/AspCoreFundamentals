@@ -6,6 +6,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Options;
 
 namespace CityInfo.APIs.Controllers.V1
@@ -133,20 +135,7 @@ namespace CityInfo.APIs.Controllers.V1
                 foreach (var error in result.PatchErrors)
                     ModelState.AddModelError(error.Key, error.Value);
 
-                var options = HttpContext.RequestServices
-                    .GetRequiredService<IOptions<ApiBehaviorOptions>>();
-
-                return (ActionResult)options.Value
-                    .InvalidModelStateResponseFactory(ControllerContext);
-            }
-
-            if (!TryValidateModel(result.DtoToValidate!))
-            {
-                var options = HttpContext.RequestServices
-                    .GetRequiredService<IOptions<ApiBehaviorOptions>>();
-
-                return (ActionResult)options.Value
-                    .InvalidModelStateResponseFactory(ControllerContext);
+                return ValidationProblem(ModelState);
             }
 
             return NoContent();
@@ -168,5 +157,18 @@ namespace CityInfo.APIs.Controllers.V1
             return NoContent();
         }
         #endregion
+
+        #region [ Validation ]
+        public override ActionResult ValidationProblem(
+        [ActionResultObjectValue] ModelStateDictionary modelStateDictionary)
+        {
+            var options = HttpContext.RequestServices
+                .GetRequiredService<IOptions<ApiBehaviorOptions>>();
+
+            return (ActionResult)options.Value
+                .InvalidModelStateResponseFactory(ControllerContext);
+        }
+        #endregion
     }
+
 }
