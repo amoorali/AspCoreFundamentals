@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace CityInfo.APIs.Controllers.V1
 {
@@ -125,14 +126,25 @@ namespace CityInfo.APIs.Controllers.V1
 
             if (result.PatchErrors is not null)
             {
+
                 foreach (var error in result.PatchErrors)
                     ModelState.AddModelError(error.Key, error.Value);
 
-                return BadRequest(ModelState);
+                var options = HttpContext.RequestServices
+                    .GetRequiredService<IOptions<ApiBehaviorOptions>>();
+
+                return (ActionResult)options.Value
+                    .InvalidModelStateResponseFactory(ControllerContext);
             }
 
             if (!TryValidateModel(result.DtoToValidate!))
-                return BadRequest(ModelState);
+            {
+                var options = HttpContext.RequestServices
+                    .GetRequiredService<IOptions<ApiBehaviorOptions>>();
+
+                return (ActionResult)options.Value
+                    .InvalidModelStateResponseFactory(ControllerContext);
+            }
 
             return NoContent();
         }
