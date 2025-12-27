@@ -1,8 +1,11 @@
 ﻿using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
+using CityInfo.Application.Behaviors;
 using CityInfo.Application.Validation.PointOfInterest;
+using CityInfo.Infrastructure.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using MediatR;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
@@ -107,6 +110,7 @@ namespace CityInfo.APIs.Extensions
             {
                 options.CustomizeProblemDetails = context =>
                 {
+                    
                     var problem = context.ProblemDetails;
 
                     problem.Instance =
@@ -114,10 +118,25 @@ namespace CityInfo.APIs.Extensions
 
                     if (problem is HttpValidationProblemDetails)
                     {
-                        problem.Type = "Model Validation Problem";
-                        problem.Status = StatusCodes.Status422UnprocessableEntity;
-                        problem.Title = "One or more validation errors occured.";
-                        problem.Detail = "See the errors field for details.";
+                        ProblemDetailsHelpers.ApplyValidationDefaults(
+                            context.HttpContext,
+                            problem);
+                    }
+
+                    if (context.Exception is ValidationException validationException)
+                    {
+                        ProblemDetailsHelpers.ApplyValidationDefaults(
+                            context.HttpContext,
+                            problem);
+
+                        var errors = validationException.Errors
+                            .GroupBy(e => e.PropertyName)
+                            .ToDictionary(
+                                g => g.Key,
+                                g => g.Select(e => e.ErrorMessage).ToArray()
+                            );
+
+                        problem.Extensions["errors"] = errors;
                     }
                 };
             });
@@ -126,6 +145,8 @@ namespace CityInfo.APIs.Extensions
             #region [ FluentValidation ]
             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssemblyContaining<PointOfInterestForUpdateDtoValidator>();
+
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             #endregion
 
             services.AddSingleton<FileExtensionContentTypeProvider>();

@@ -38,6 +38,8 @@ namespace CityInfo.APIs
 
             app.UseAuthorization();
 
+            app.UseExceptionHandler();
+
             app.MapControllers();
 
             app.Run();
