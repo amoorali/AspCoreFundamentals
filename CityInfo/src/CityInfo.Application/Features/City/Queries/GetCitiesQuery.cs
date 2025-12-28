@@ -5,8 +5,6 @@ using MediatR;
 namespace CityInfo.Application.Features.City.Queries
 {
     public record GetCitiesQuery(
-        CitiesResourceParameters CitiesResourceParameters,
-        int PageNumber,
-        int PageSize
+        CitiesResourceParameters CitiesResourceParameters
     ) : IRequest<GetCitiesResult>;
 }

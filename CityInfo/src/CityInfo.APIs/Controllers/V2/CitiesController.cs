@@ -17,7 +17,6 @@ namespace CityInfo.APIs.Controllers.V2
     {
         #region [ Fields ]
         private readonly IMediator _mediator;
-        const int maxCitiesPageSize = 20;
         #endregion
 
         #region [ Constructor ]
@@ -31,12 +30,9 @@ namespace CityInfo.APIs.Controllers.V2
         #region [ GET Methods ]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<City>>> GetCitiesAsync(
-            CitiesResourceParameters citiesResourceParameters, int pageNumber = 1, int pageSize = 10)
+            CitiesResourceParameters citiesResourceParameters)
         {
-            if (pageSize > maxCitiesPageSize)
-                pageSize = maxCitiesPageSize;
-
-            var result = await _mediator.Send(new GetCitiesQuery(citiesResourceParameters, pageNumber, pageSize));
+            var result = await _mediator.Send(new GetCitiesQuery(citiesResourceParameters));
 
             Response.Headers.Add("X-Pagination",
                 JsonSerializer.Serialize(result.PaginationMetaData));
