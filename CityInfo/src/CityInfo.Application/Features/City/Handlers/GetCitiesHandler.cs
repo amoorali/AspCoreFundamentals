@@ -18,8 +18,9 @@ namespace CityInfo.Application.Features.City.Handlers
             IUnitOfWork unitOfWork,
             IMapper mapper,
             IMailService mailService,
-            IPropertyCheckerService propertyCheckerService)
-            : base(unitOfWork, mapper, mailService, propertyCheckerService)
+            IPropertyCheckerService propertyCheckerService,
+            IPropertyMappingService propertyMappingService)
+            : base(unitOfWork, mapper, mailService, propertyCheckerService, propertyMappingService)
         {
         }
         #endregion
@@ -35,8 +36,34 @@ namespace CityInfo.Application.Features.City.Handlers
                 return new GetCitiesResult(null, false, false, null);
             }
 
-            var pagedEntities = await UnitOfWork.Cities
-                .GetCitiesAsync(request.CitiesResourceParameters);
+            var parameters = request.CitiesResourceParameters;
+            var query = UnitOfWork.Cities.QueryCities();
+
+            if (!string.IsNullOrEmpty(parameters.Name))
+            {
+                parameters.Name = parameters.Name.Trim();
+                query = query.Where(c => c.Name == parameters.Name);
+            }
+
+            if (!string.IsNullOrWhiteSpace(parameters.SearchQuery))
+            {
+                var search = parameters.SearchQuery.Trim();
+                query = query.Where(c => 
+                    c.Name.Contains(search) ||
+                    !string.IsNullOrEmpty(c.Description) &&
+                    c.Description.Contains(search));
+            }
+
+            if (!string.IsNullOrWhiteSpace(parameters.OrderBy) &&
+                parameters.OrderBy.ToLowerInvariant() == "name")
+            {
+                query = query.OrderBy(c => c.Name);
+            }
+
+            var pagedEntities = await PagedList<Domain.Entities.City>.CreateAsync(
+                query,
+                parameters.PageNumber,
+                parameters.PageSize);
 
             var paginationMetadata = new PaginationMetadata(
                 pagedEntities.TotalCount,
@@ -45,7 +72,7 @@ namespace CityInfo.Application.Features.City.Handlers
                 pagedEntities.TotalPages);
 
             var dtos = Mapper.Map<IEnumerable<CityWithoutPointsOfInterestDto>>(pagedEntities.Items)
-                             .ShapeData(request.CitiesResourceParameters.Fields);
+                             .ShapeData(parameters.Fields);
 
             return new GetCitiesResult(
                 dtos,

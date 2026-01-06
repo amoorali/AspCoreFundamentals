@@ -6,7 +6,7 @@ namespace CityInfo.Application.Repositories.Contracts
 {
     public interface ICityRepository : IRepository<City>
     {
-        Task<PagedList<City>> GetCitiesAsync(CitiesResourceParameters citiesResourceParameters);
+        IQueryable<City> QueryCities();
         Task<City?> GetCityAsync(int cityId, bool includePointsOfInterest);
         Task AddPointOfInterestForCityAsync(int cityId, PointOfInterest pointOfInterest);
         Task<bool> CityExistsAsync(int cityId);

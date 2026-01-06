@@ -1,6 +1,4 @@
-﻿using CityInfo.Application.Common.Helpers;
-using CityInfo.Application.Common.ResourceParameters;
-using CityInfo.Application.Repositories.Contracts;
+﻿using CityInfo.Application.Repositories.Contracts;
 using CityInfo.Domain.Entities;
 using CityInfo.Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
@@ -17,35 +15,8 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
         #endregion
 
         #region [ Methods ]
-        public async Task<PagedList<City>> GetCitiesAsync(CitiesResourceParameters citiesResourceParameters)
-        {
-            // collection to start from
-            var collection = Context.Cities.AsQueryable();
-
-            if (!string.IsNullOrEmpty(citiesResourceParameters.Name))
-            {
-                citiesResourceParameters.Name = citiesResourceParameters.Name.Trim();
-                collection = collection.Where(c => c.Name == citiesResourceParameters.Name);
-            }
-
-            if (!string.IsNullOrWhiteSpace(citiesResourceParameters.SearchQuery))
-            {
-                citiesResourceParameters.SearchQuery = citiesResourceParameters.SearchQuery.Trim();
-                collection = collection.Where(c => c.Name.Contains(citiesResourceParameters.SearchQuery)
-                || !string.IsNullOrEmpty(c.Description) && c.Description.Contains(citiesResourceParameters.SearchQuery));
-            }
-
-            if (!string.IsNullOrWhiteSpace(citiesResourceParameters.OrderBy) &&
-                citiesResourceParameters.OrderBy.ToLowerInvariant() == "name")
-            {
-                collection = collection.OrderBy(c => c.Name);
-            }
-
-            return await PagedList<City>.CreateAsync(
-                collection,
-                citiesResourceParameters.PageNumber,
-                citiesResourceParameters.PageSize);
-        }
+        public IQueryable<City> QueryCities()
+            => Context.Cities.AsNoTracking();
 
         public async Task<City?> GetCityAsync(int cityId, bool includePointsOfInterest)
         {
@@ -53,13 +24,11 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
             {
                 return await Context.Cities
                     .Include(c => c.PointsOfInterest)
-                    .Where(c => c.Id == cityId)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync(c => c.Id == cityId);
             }
 
             return await Context.Cities
-                .Where(c => c.Id == cityId)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(c => c.Id == cityId);
         }
 
         public async Task AddPointOfInterestForCityAsync(int cityId, PointOfInterest pointOfInterest)

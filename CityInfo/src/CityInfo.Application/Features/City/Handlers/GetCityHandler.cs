@@ -17,8 +17,9 @@ namespace CityInfo.Application.Features.City.Handlers
             IUnitOfWork unitOfWork,
             IMapper mapper,
             IMailService mailService,
-            IPropertyCheckerService propertyCheckerService)
-            : base(unitOfWork, mapper, mailService, propertyCheckerService)
+            IPropertyCheckerService propertyCheckerService,
+            IPropertyMappingService propertyMappingService)
+            : base(unitOfWork, mapper, mailService, propertyCheckerService, propertyMappingService)
         {
         }
         #endregion
