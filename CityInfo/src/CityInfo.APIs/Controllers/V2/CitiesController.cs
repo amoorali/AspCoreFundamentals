@@ -2,7 +2,6 @@
 using CityInfo.Application.Common.Helpers;
 using CityInfo.Application.Common.ResourceParameters;
 using CityInfo.Application.Features.City.Queries;
-using CityInfo.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -39,6 +38,7 @@ namespace CityInfo.APIs.Controllers.V2
                     return Url.Link("GetCitiesAsync",
                         new
                         {
+                            fields = citiesResourceParameters.Fields,
                             pageNumber = citiesResourceParameters.PageNumber - 1,
                             pageSize = citiesResourceParameters.PageSize,
                             name = citiesResourceParameters.Name,
@@ -48,6 +48,7 @@ namespace CityInfo.APIs.Controllers.V2
                     return Url.Link("GetCitiesAsync",
                         new
                         {
+                            fields = citiesResourceParameters.Fields,
                             pageNumber = citiesResourceParameters.PageNumber + 1,
                             pageSize = citiesResourceParameters.PageSize,
                             name = citiesResourceParameters.Name,
@@ -57,6 +58,7 @@ namespace CityInfo.APIs.Controllers.V2
                     return Url.Link("GetCitiesAsync",
                         new
                         {
+                            fields = citiesResourceParameters.Fields,
                             pageNumber = citiesResourceParameters.PageNumber + 1,
                             pageSize = citiesResourceParameters.PageSize,
                             name = citiesResourceParameters.Name,
@@ -69,7 +71,7 @@ namespace CityInfo.APIs.Controllers.V2
         #region [ GET Methods ]
         [HttpGet(Name = "GetCitiesAsync")]
         [HttpHead]
-        public async Task<ActionResult<IEnumerable<City>>> GetCitiesAsync(
+        public async Task<ActionResult> GetCitiesAsync(
             [FromQuery] CitiesResourceParameters citiesResourceParameters)
         {
             var result = await _mediator.Send(new GetCitiesQuery(citiesResourceParameters));
