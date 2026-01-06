@@ -38,6 +38,7 @@ namespace CityInfo.APIs.Controllers.V2
                     return Url.Link("GetCitiesAsync",
                         new
                         {
+                            orderBy = citiesResourceParameters.OrderBy,
                             fields = citiesResourceParameters.Fields,
                             pageNumber = citiesResourceParameters.PageNumber - 1,
                             pageSize = citiesResourceParameters.PageSize,
@@ -48,6 +49,7 @@ namespace CityInfo.APIs.Controllers.V2
                     return Url.Link("GetCitiesAsync",
                         new
                         {
+                            orderBy = citiesResourceParameters.OrderBy,
                             fields = citiesResourceParameters.Fields,
                             pageNumber = citiesResourceParameters.PageNumber + 1,
                             pageSize = citiesResourceParameters.PageSize,
@@ -58,6 +60,7 @@ namespace CityInfo.APIs.Controllers.V2
                     return Url.Link("GetCitiesAsync",
                         new
                         {
+                            orderBy = citiesResourceParameters.OrderBy,
                             fields = citiesResourceParameters.Fields,
                             pageNumber = citiesResourceParameters.PageNumber + 1,
                             pageSize = citiesResourceParameters.PageSize,
