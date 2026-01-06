@@ -40,6 +40,7 @@ namespace CityInfo.Infrastructure.Extensions
 
             #region [ Other Services ]
             services.AddTransient<IPropertyCheckerService, PropertyCheckerService>();
+            services.AddTransient<IPropertyMappingService, PropertyMappingService>();
             #endregion
         }
     }

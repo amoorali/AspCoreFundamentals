@@ -19,13 +19,6 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
         #endregion
 
         #region [ City Methods ]
-        public async Task<IEnumerable<City>> GetCitiesAsync()
-        {
-            return await Context.Cities
-                .OrderBy(c => c.Name)
-                .ToListAsync();
-        }
-
         public async Task<PagedList<City>> GetCitiesAsync(CitiesResourceParameters citiesResourceParameters)
         {
             // collection to start from
@@ -42,6 +35,12 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
                 citiesResourceParameters.SearchQuery = citiesResourceParameters.SearchQuery.Trim();
                 collection = collection.Where(c => c.Name.Contains(citiesResourceParameters.SearchQuery)
                 || !string.IsNullOrEmpty(c.Description) && c.Description.Contains(citiesResourceParameters.SearchQuery));
+            }
+
+            if (!string.IsNullOrWhiteSpace(citiesResourceParameters.OrderBy) &&
+                citiesResourceParameters.OrderBy.ToLowerInvariant() == "name")
+            {
+                collection = collection.OrderBy(c => c.Name);
             }
 
             return await PagedList<City>.CreateAsync(
