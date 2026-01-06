@@ -8,8 +8,10 @@ namespace CityInfo.Application.Features.BaseImplementations
         protected readonly IUnitOfWork UnitOfWork;
         protected readonly IMapper Mapper;
         protected readonly IMailService MailService;
+        protected readonly IPropertyCheckerService PropertyCheckerService;
 
-        public GeneralHandler(IUnitOfWork unitOfWork, IMapper mapper, IMailService mailService)
+        public GeneralHandler(IUnitOfWork unitOfWork, IMapper mapper, IMailService mailService,
+            IPropertyCheckerService propertyCheckerService)
         {
             UnitOfWork = unitOfWork ??
                 throw new ArgumentNullException(nameof(unitOfWork));
@@ -17,6 +19,7 @@ namespace CityInfo.Application.Features.BaseImplementations
                 throw new ArgumentNullException(nameof(mapper));
             MailService = mailService ??
                 throw new ArgumentNullException(nameof(mailService));
+            PropertyCheckerService = propertyCheckerService;
         }
     }
 }

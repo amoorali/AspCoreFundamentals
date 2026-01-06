@@ -14,8 +14,9 @@ namespace CityInfo.Application.Features.City.Handlers
     public class GetCitiesHandler : GeneralHandler,
         IRequestHandler<GetCitiesQuery, GetCitiesResult>
     {
-        public GetCitiesHandler(IUnitOfWork unitOfWork, IMapper mapper, IMailService mailService)
-            : base(unitOfWork, mapper, mailService)
+        public GetCitiesHandler(IUnitOfWork unitOfWork, IMapper mapper, IMailService mailService,
+            IPropertyCheckerService propertyCheckerService)
+            : base(unitOfWork, mapper, mailService, propertyCheckerService)
         {
         }
 
@@ -23,6 +24,12 @@ namespace CityInfo.Application.Features.City.Handlers
             GetCitiesQuery request,
             CancellationToken cancellationToken)
         {
+            if (!PropertyCheckerService.TypeHasProperties<CityWithoutPointsOfInterestDto>
+                (request.CitiesResourceParameters.Fields))
+            {
+                return new GetCitiesResult(null, false, false, null);
+            }
+
             var pagedEntities = await UnitOfWork.Cities
                 .GetCitiesAsync(request.CitiesResourceParameters);
 
