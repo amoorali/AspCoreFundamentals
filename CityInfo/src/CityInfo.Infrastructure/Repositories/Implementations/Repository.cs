@@ -10,7 +10,7 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
         protected readonly CityInfoContext Context;
         #endregion
 
-        #region [ Cosntructure ]
+        #region [ Constructor ]
         public Repository(CityInfoContext context)
         {
             Context = context ?? throw new ArgumentNullException(nameof(context));
