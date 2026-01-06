@@ -15,7 +15,7 @@ namespace CityInfo.APIs.Controllers.V1
         private readonly FileExtensionContentTypeProvider _fileExtensionContentTypeProvider;
         #endregion
 
-        #region [ Constructure ]
+        #region [ Constructor ]
         public FilesController(
             FileExtensionContentTypeProvider fileExtensionContentTypeProvider)
         {

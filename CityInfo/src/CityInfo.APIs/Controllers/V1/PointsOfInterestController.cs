@@ -23,7 +23,7 @@ namespace CityInfo.APIs.Controllers.V1
         private readonly IMediator _mediator;
         #endregion
 
-        #region [ Constructure ]
+        #region [ Constructor ]
         public PointsOfInterestController(ILogger<PointsOfInterestController> logger,
             IMediator mediator)
         {
