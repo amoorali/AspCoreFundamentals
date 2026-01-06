@@ -5,7 +5,8 @@ namespace CityInfo.Application.Features.City.Queries
 {
     public record GetCityQuery(
         int CityId,
-        bool IncludePointsOfInterest
+        bool IncludePointsOfInterest,
+        string? Fields
     ) : IRequest<GetCityResult>;
 }
 

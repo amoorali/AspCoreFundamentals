@@ -32,7 +32,7 @@ namespace CityInfo.Application.Features.City.Handlers
                 pagedEntities.CurrentPage,
                 pagedEntities.TotalPages);
 
-            var dtos = Mapper.Map<IReadOnlyList<CityWithoutPointsOfInterestDto>>(pagedEntities.Items)
+            var dtos = Mapper.Map<IEnumerable<CityWithoutPointsOfInterestDto>>(pagedEntities.Items)
                              .ShapeData(request.CitiesResourceParameters.Fields);
 
             return new GetCitiesResult(

@@ -1,4 +1,5 @@
-﻿using CityInfo.Application.DTOs.City;
+﻿using CityInfo.Application.Common.Helpers;
+using CityInfo.Application.DTOs.City;
 using CityInfo.Application.Features.BaseImplementations;
 using CityInfo.Application.Features.City.Queries;
 using CityInfo.Application.Features.City.Results;
@@ -24,16 +25,19 @@ namespace CityInfo.Application.Features.City.Handlers
                 .GetCityAsync(request.CityId, request.IncludePointsOfInterest);
 
             if (entity == null)
-                return new GetCityResult(true, null, null);
+                return new GetCityResult(true, null);
 
             if (request.IncludePointsOfInterest)
             {
-                var dtoWithPointsOfInterest = Mapper.Map<CityDto>(entity);
-                return new GetCityResult(false, dtoWithPointsOfInterest, null);
+                var dtoWithPointsOfInterest = Mapper.Map<CityDto>(entity)
+                    .ShapeData(request.Fields);
+                return new GetCityResult(false, dtoWithPointsOfInterest);
             }
 
-            var dtoWithoutPointsOfInterest = Mapper.Map<CityWithoutPointsOfInterestDto>(entity);
-            return new GetCityResult(false, null, dtoWithoutPointsOfInterest);
+            var dtoWithoutPointsOfInterest = Mapper.Map<CityWithoutPointsOfInterestDto>(entity)
+                .ShapeData(request.Fields);
+
+            return new GetCityResult(false, dtoWithoutPointsOfInterest);
         }
     }
 }

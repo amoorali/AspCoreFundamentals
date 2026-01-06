@@ -11,7 +11,7 @@ namespace CityInfo.APIs.Controllers.V1
 {
     [ApiController]
     [Authorize]
-    [ApiVersion(1)]
+    [ApiVersion(1, Deprecated = true)]
     [Route("api/v{version:apiVersion}/cities")]
     public class CitiesController : ControllerBase
     {
@@ -32,6 +32,7 @@ namespace CityInfo.APIs.Controllers.V1
         /// Get a city by id
         /// </summary>
         /// <param name="cityId">The id of the city to get</param>
+        /// <param name="fields"></param>
         /// <param name="includePointsOfInterest">Whether or not to include the points of interest</param>
         /// <returns>A city with or without points of interest</returns>
         /// <response code="200">Returns the requested city</response>
@@ -42,17 +43,17 @@ namespace CityInfo.APIs.Controllers.V1
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetCityAsync(
-            int cityId, bool includePointsOfInterest = false)
+            int cityId, string? fields, bool includePointsOfInterest = false)
         {
-            var result = await _mediator.Send(new GetCityQuery(cityId, includePointsOfInterest));
+            var result = await _mediator.Send(new GetCityQuery(cityId, includePointsOfInterest, fields));
 
             if (result.NotFound)
                 return NotFound("The id isn't in the collection");
 
             if (includePointsOfInterest)
-                return Ok(result.DtoWithPointsOfInterest);
+                return Ok(result.Item);
 
-            return Ok(result.DtoWithoutPointsOfInterest);
+            return Ok(result.Item);
         }
         #endregion
     }

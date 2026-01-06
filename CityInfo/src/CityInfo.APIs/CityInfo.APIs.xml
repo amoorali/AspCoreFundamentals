@@ -4,23 +4,25 @@
         <name>CityInfo.APIs</name>
     </assembly>
     <members>
-        <member name="M:CityInfo.APIs.Controllers.V1.CitiesController.GetCityAsync(System.Int32,System.Boolean)">
+        <member name="M:CityInfo.APIs.Controllers.V1.CitiesController.GetCityAsync(System.Int32,System.String,System.Boolean)">
             <summary>
             Get a city by id
             </summary>
             <param name="cityId">The id of the city to get</param>
+            <param name="fields"></param>
             <param name="includePointsOfInterest">Whether or not to include the points of interest</param>
             <returns>A city with or without points of interest</returns>
             <response code="200">Returns the requested city</response>
             <response code="404"></response>
             <response code="400"></response>
         </member>
-        <member name="M:CityInfo.APIs.Controllers.V2.CitiesController.GetCityAsync(System.Int32,System.Boolean)">
+        <member name="M:CityInfo.APIs.Controllers.V2.CitiesController.GetCityAsync(System.Int32,System.String,System.Boolean)">
             <summary>
             Get a city by id
             </summary>
             <param name="cityId">The id of the city to get</param>
             <param name="includePointsOfInterest">Whether or not to include the points of interest</param>
+            <param name="fields">Specify the fields to retrieve</param>
             <returns>A city with or without points of interest</returns>
             <response code="200">Returns the requested city</response>
             <response code="404"></response>
