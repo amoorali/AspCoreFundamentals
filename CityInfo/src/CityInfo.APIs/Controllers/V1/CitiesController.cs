@@ -1,11 +1,8 @@
 ﻿using Asp.Versioning;
-using CityInfo.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
 using MediatR;
 using CityInfo.Application.Features.City.Queries;
-using CityInfo.Application.Common.ResourceParameters;
 
 namespace CityInfo.APIs.Controllers.V1
 {

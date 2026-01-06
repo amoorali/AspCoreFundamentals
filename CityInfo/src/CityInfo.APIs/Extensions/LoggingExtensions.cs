@@ -4,6 +4,7 @@ namespace CityInfo.APIs.Extensions
 {
     public static class LoggingExtensions
     {
+        #region [ Serilog ]
         public static void ConfigureLoggingSetup(this IHostBuilder hostbuilder)
         {
             Log.Logger = new LoggerConfiguration()
@@ -14,5 +15,6 @@ namespace CityInfo.APIs.Extensions
 
             hostbuilder.UseSerilog();
         }
+        #endregion
     }
 }

@@ -12,12 +12,15 @@ namespace CityInfo.Application.Features.City.Handlers
     public class GetCityHandler : GeneralHandler,
         IRequestHandler<GetCityQuery, GetCityResult>
     {
+        #region [ Constructor ]
         public GetCityHandler(IUnitOfWork unitOfWork, IMapper mapper, IMailService mailService,
             IPropertyCheckerService propertyCheckerService)
             : base(unitOfWork, mapper, mailService, propertyCheckerService)
         {
         }
+        #endregion
 
+        #region [ Handler ]
         public async Task<GetCityResult> Handle(
             GetCityQuery request,
             CancellationToken cancellationToken)
@@ -43,5 +46,6 @@ namespace CityInfo.Application.Features.City.Handlers
 
             return new GetCityResult(false, dtoWithoutPointsOfInterest);
         }
+        #endregion
     }
 }

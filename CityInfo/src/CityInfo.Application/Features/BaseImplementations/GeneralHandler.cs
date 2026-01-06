@@ -5,11 +5,14 @@ namespace CityInfo.Application.Features.BaseImplementations
 {
     public class GeneralHandler
     {
+        #region [ Fields ]
         protected readonly IUnitOfWork UnitOfWork;
         protected readonly IMapper Mapper;
         protected readonly IMailService MailService;
         protected readonly IPropertyCheckerService PropertyCheckerService;
+        #endregion
 
+        #region [ Constructor ]
         public GeneralHandler(IUnitOfWork unitOfWork, IMapper mapper, IMailService mailService,
             IPropertyCheckerService propertyCheckerService)
         {
@@ -21,5 +24,6 @@ namespace CityInfo.Application.Features.BaseImplementations
                 throw new ArgumentNullException(nameof(mailService));
             PropertyCheckerService = propertyCheckerService;
         }
+        #endregion
     }
 }

@@ -6,13 +6,18 @@ namespace CityInfo.Application.Behaviors
     public sealed class ValidationBehavior<TRequest, TResponse>
         : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
     {
+        #region [ Fields ]
         private readonly IEnumerable<IValidator<TRequest>> _validators;
+        #endregion
 
+        #region [ Constructor ]
         public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
         {
             _validators = validators;
         }
+        #endregion
 
+        #region [ Handler ]
         public async Task<TResponse> Handle(
             TRequest request,
             RequestHandlerDelegate<TResponse> next,
@@ -36,5 +41,6 @@ namespace CityInfo.Application.Behaviors
 
             return await next(cancellationToken);
         }
+        #endregion
     }
 }

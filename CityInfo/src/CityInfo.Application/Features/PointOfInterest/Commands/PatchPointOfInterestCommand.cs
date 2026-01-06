@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.JsonPatch;
 
 namespace CityInfo.Application.Features.PointOfInterest.Commands
 {
+    #region [ Command Record ]
     public record PatchPointOfInterestCommand(
         int CityId,
         int PointOfInterestId,
         JsonPatchDocument<PointOfInterestForUpdateDto> PatchDocument
     ) : IRequest<PatchPointOfInterestResult>;
+    #endregion
 }

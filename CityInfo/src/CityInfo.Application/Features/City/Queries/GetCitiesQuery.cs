@@ -4,7 +4,9 @@ using MediatR;
 
 namespace CityInfo.Application.Features.City.Queries
 {
+    #region [ Query Record ]
     public record GetCitiesQuery(
         CitiesResourceParameters CitiesResourceParameters
     ) : IRequest<GetCitiesResult>;
+    #endregion
 }

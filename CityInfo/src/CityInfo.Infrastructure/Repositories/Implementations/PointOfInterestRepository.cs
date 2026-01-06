@@ -14,7 +14,7 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
         }
         #endregion
 
-        #region [ PointOfInterest Methods ]
+        #region [ Methods ]
         public async Task<PointOfInterest?> GetPointOfInterestForCityAsync(int cityId, int pointOfInterestId)
         {
             return await Context.PointsOfInterest

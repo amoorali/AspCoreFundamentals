@@ -3,8 +3,10 @@ using MediatR;
 
 namespace CityInfo.Application.Features.PointOfInterest.Queries
 {
+    #region [ Query Record ]
     public record GetPointsOfInterestQuery(
         int CityId,
         string? CityName
     ) : IRequest<GetPointsOfInterestResult>;
+    #endregion
 }

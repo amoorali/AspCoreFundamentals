@@ -3,8 +3,10 @@ using MediatR;
 
 namespace CityInfo.Application.Features.PointOfInterest.Commands
 {
+    #region [ Command Record ]
     public record DeletePointOfInterestCommand(
         int CityId,
         int PointOfInterestId
     ) : IRequest<DeletePointOfInterestResult>;
+    #endregion
 }

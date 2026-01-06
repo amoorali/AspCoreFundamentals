@@ -6,6 +6,7 @@ namespace CityInfo.Application.Validation.PointOfInterest
     public abstract class PointOfInterestForManipulationDtoValidator<T>
         : AbstractValidator<T> where T : PointOfInterestForManipulationDto
     {
+        #region [ Constructor ]
         protected PointOfInterestForManipulationDtoValidator()
         {
             RuleFor(x => x.Name)
@@ -15,5 +16,6 @@ namespace CityInfo.Application.Validation.PointOfInterest
             RuleFor(x => x.Description)
                 .MaximumLength(1500).WithMessage("The description shouldn't have more than 1500 characters");
         }
+        #endregion
     }
 }

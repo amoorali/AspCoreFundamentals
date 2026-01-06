@@ -3,10 +3,12 @@ using MediatR;
 
 namespace CityInfo.Application.Features.City.Queries
 {
+    #region [ Query Record ]
     public record GetCityQuery(
         int CityId,
         bool IncludePointsOfInterest,
         string? Fields
     ) : IRequest<GetCityResult>;
+    #endregion
 }
 

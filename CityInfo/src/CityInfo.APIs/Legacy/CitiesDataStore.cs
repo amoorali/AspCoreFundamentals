@@ -10,7 +10,7 @@ namespace CityInfo.APIs.Legacy
         //public static CitiesDataStore Current { get; } = new CitiesDataStore();
         #endregion
 
-        #region [ Constructure ]
+        #region [ Constructor ]
         public CitiesDataStore()
         {
             // init dummy data

@@ -7,6 +7,7 @@ namespace CityInfo.Infrastructure.Services.Implementations
 {
     public class PropertyMappingService : IPropertyMappingService
     {
+        #region [ Fields ]
         private readonly Dictionary<string, PropertyMappingValue> _cityPropertyMapping =
             new(StringComparer.OrdinalIgnoreCase)
             {
@@ -17,12 +18,16 @@ namespace CityInfo.Infrastructure.Services.Implementations
 
         private readonly IList<IPropertyMapping> _propertyMappings =
             new List<IPropertyMapping>();
+        #endregion
 
+        #region [ Constructor ]
         public PropertyMappingService()
         {
             _propertyMappings.Add(new PropertyMapping<CityDto, City>(_cityPropertyMapping));
         }
+        #endregion
 
+        #region [ Methods ]
         public Dictionary<string, PropertyMappingValue> GetPropertyMapping<TSource, TDestination>()
         {
             var matchingMapping = _propertyMappings
@@ -34,5 +39,6 @@ namespace CityInfo.Infrastructure.Services.Implementations
             throw new Exception($"Cannot find exact property mapping instance" +
                 $"for <{typeof(TSource)},{typeof(TDestination)}>");
         }
+        #endregion
     }
 }

@@ -1,11 +1,9 @@
-﻿using CityInfo.Application.Common;
-using CityInfo.Application.Common.Helpers;
+﻿using CityInfo.Application.Common.Helpers;
 using CityInfo.Application.Common.ResourceParameters;
 using CityInfo.Application.Repositories.Contracts;
 using CityInfo.Domain.Entities;
 using CityInfo.Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
-using System.Xml.Linq;
 
 namespace CityInfo.Infrastructure.Repositories.Implementations
 {
@@ -18,7 +16,7 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
         }
         #endregion
 
-        #region [ City Methods ]
+        #region [ Methods ]
         public async Task<PagedList<City>> GetCitiesAsync(CitiesResourceParameters citiesResourceParameters)
         {
             // collection to start from

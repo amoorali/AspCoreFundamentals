@@ -1,10 +1,11 @@
-﻿using CityInfo.Application.DTOs.City;
-using System.Dynamic;
+﻿using System.Dynamic;
 
 namespace CityInfo.Application.Features.City.Results
 {
+    #region [ Result Record ]
     public record GetCityResult(
         bool NotFound,
         ExpandoObject? Item
     );
+    #endregion
 }

@@ -1,6 +1,5 @@
 ﻿using CityInfo.Application.Common;
 using CityInfo.Application.Common.Helpers;
-using CityInfo.Application.Common.ResourceParameters;
 using CityInfo.Application.DTOs.City;
 using CityInfo.Application.Features.BaseImplementations;
 using CityInfo.Application.Features.City.Queries;
@@ -14,12 +13,15 @@ namespace CityInfo.Application.Features.City.Handlers
     public class GetCitiesHandler : GeneralHandler,
         IRequestHandler<GetCitiesQuery, GetCitiesResult>
     {
+        #region [ Constructor ]
         public GetCitiesHandler(IUnitOfWork unitOfWork, IMapper mapper, IMailService mailService,
             IPropertyCheckerService propertyCheckerService)
             : base(unitOfWork, mapper, mailService, propertyCheckerService)
         {
         }
+        #endregion
 
+        #region [ Handler ]
         public async Task<GetCitiesResult> Handle(
             GetCitiesQuery request,
             CancellationToken cancellationToken)
@@ -48,5 +50,6 @@ namespace CityInfo.Application.Features.City.Handlers
                 pagedEntities.HasNext,
                 paginationMetadata);
         }
+        #endregion
     }
 }
