@@ -11,11 +11,18 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
     public class GetPointOfInterestHandler : GeneralHandler,
         IRequestHandler<GetPointOfInterestQuery, GetPointOfInterestResult>
     {
-        public GetPointOfInterestHandler(IUnitOfWork unitOfWork, IMapper mapper, IMailService mailService)
-            : base(unitOfWork, mapper, mailService)
+        #region [ Constructor ]
+        public GetPointOfInterestHandler(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            IMailService mailService,
+            IPropertyCheckerService propertyCheckerService)
+            : base(unitOfWork, mapper, mailService, propertyCheckerService)
         {
         }
+        #endregion
 
+        #region [ Handler ]
         public async Task<GetPointOfInterestResult> Handle(
             GetPointOfInterestQuery request,
             CancellationToken cancellationToken)
@@ -33,5 +40,6 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
 
             return new GetPointOfInterestResult(false, false, dto);
         }
+        #endregion
     }
 }

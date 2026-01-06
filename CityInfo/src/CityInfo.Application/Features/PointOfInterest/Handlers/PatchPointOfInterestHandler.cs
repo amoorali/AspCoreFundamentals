@@ -12,18 +12,24 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
     public class PatchPointOfInterestHandler : GeneralHandler,
         IRequestHandler<PatchPointOfInterestCommand, PatchPointOfInterestResult>
     {
+        #region [ Fields ]
         private readonly IValidator<PointOfInterestForUpdateDto> _validator;
+        #endregion
 
+        #region [ Constructor ]
         public PatchPointOfInterestHandler(
             IUnitOfWork unitOfWork,
             IMapper mapper,
             IMailService mailService,
+            IPropertyCheckerService propertyCheckerService,
             IValidator<PointOfInterestForUpdateDto> validator)
-            : base(unitOfWork, mapper, mailService)
+            : base(unitOfWork, mapper, mailService, propertyCheckerService)
         {
             _validator = validator;
         }
+        #endregion
 
+        #region [ Handler ]
         public async Task<PatchPointOfInterestResult> Handle(
             PatchPointOfInterestCommand request,
             CancellationToken cancellationToken)
@@ -69,5 +75,6 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
 
             return new PatchPointOfInterestResult(false, false, dtoToPatch, null);
         }
+        #endregion
     }
 }

@@ -11,11 +11,18 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
     public class CreatePointOfInterestHandler : GeneralHandler,
         IRequestHandler<CreatePointOfInterestCommand, CreatePointOfInterestResult>
     {
-        public CreatePointOfInterestHandler(IUnitOfWork unitOfWork, IMapper mapper, IMailService mailService)
-            : base(unitOfWork, mapper, mailService)
+        #region [ Constructor ]
+        public CreatePointOfInterestHandler(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            IMailService mailService,
+            IPropertyCheckerService propertyCheckerService)
+            : base(unitOfWork, mapper, mailService, propertyCheckerService)
         {
         }
+        #endregion
 
+        #region [ Handler ]
         public async Task<CreatePointOfInterestResult> Handle(
             CreatePointOfInterestCommand request,
             CancellationToken cancellationToken)
@@ -32,5 +39,6 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
 
             return new CreatePointOfInterestResult(false, createdDto);
         }
+        #endregion
     }
 }
