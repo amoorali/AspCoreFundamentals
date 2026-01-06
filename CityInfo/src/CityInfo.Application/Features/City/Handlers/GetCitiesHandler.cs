@@ -1,4 +1,5 @@
 ﻿using CityInfo.Application.Common;
+using CityInfo.Application.Common.Exceptions;
 using CityInfo.Application.Common.Helpers;
 using CityInfo.Application.DTOs.City;
 using CityInfo.Application.Features.BaseImplementations;
@@ -30,35 +31,42 @@ namespace CityInfo.Application.Features.City.Handlers
             GetCitiesQuery request,
             CancellationToken cancellationToken)
         {
+            var parameters = request.CitiesResourceParameters;
+
             if (!PropertyCheckerService.TypeHasProperties<CityWithoutPointsOfInterestDto>
-                (request.CitiesResourceParameters.Fields))
+                (parameters.Fields))
             {
-                return new GetCitiesResult(null, false, false, null);
+                throw new BadRequestException("No cities found");
             }
 
-            var parameters = request.CitiesResourceParameters;
             var query = UnitOfWork.Cities.QueryCities();
 
-            if (!string.IsNullOrEmpty(parameters.Name))
-            {
-                parameters.Name = parameters.Name.Trim();
-                query = query.Where(c => c.Name == parameters.Name);
-            }
+            #region [ Filter ]
+            var name = parameters.Name?.Trim();
 
-            if (!string.IsNullOrWhiteSpace(parameters.SearchQuery))
+            if (!string.IsNullOrEmpty(name))
+                query = query.Where(c => c.Name == name);
+            #endregion
+
+            #region [ Search Query ]
+            var searchQuery = parameters.SearchQuery?.Trim();
+
+            if (!string.IsNullOrWhiteSpace(searchQuery))
             {
-                var search = parameters.SearchQuery.Trim();
-                query = query.Where(c => 
-                    c.Name.Contains(search) ||
+                query = query.Where(c =>
+                    c.Name.Contains(searchQuery) ||
                     !string.IsNullOrEmpty(c.Description) &&
-                    c.Description.Contains(search));
+                    c.Description.Contains(searchQuery));
             }
+            #endregion
 
+            #region [ Sorting ]
             if (!string.IsNullOrWhiteSpace(parameters.OrderBy) &&
-                parameters.OrderBy.ToLowerInvariant() == "name")
+                parameters.OrderBy.Equals("name", StringComparison.OrdinalIgnoreCase))
             {
                 query = query.OrderBy(c => c.Name);
             }
+            #endregion
 
             var pagedEntities = await PagedList<Domain.Entities.City>.CreateAsync(
                 query,
