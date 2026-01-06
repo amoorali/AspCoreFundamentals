@@ -10,7 +10,7 @@ namespace CityInfo.Infrastructure.DbContexts
         public DbSet<PointOfInterest> PointsOfInterest { get; set; }
         #endregion
 
-        #region [ Constructure ]
+        #region [ Constructor ]
         public CityInfoContext(DbContextOptions<CityInfoContext> options)
             : base(options)
         {            
