@@ -33,6 +33,12 @@ namespace CityInfo.Application.Features.City.Handlers
         {
             var parameters = request.CitiesResourceParameters;
 
+            if (!PropertyMappingService.
+                ValidMappingExistsFor<CityDto, Domain.Entities.City>(parameters.OrderBy))
+            {
+                throw new BadRequestException("Invalid sorting fields.");
+            }
+
             if (!PropertyCheckerService.TypeHasProperties<CityWithoutPointsOfInterestDto>
                 (parameters.Fields))
             {
