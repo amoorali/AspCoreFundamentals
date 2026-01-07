@@ -14,7 +14,6 @@ namespace CityInfo.APIs.Controllers.V2
     public class PointsOfInterestController : ControllerBase
     {
         #region [ Fields ]
-        private readonly ILogger<PointsOfInterestController> _logger;
         private readonly IMediator _mediator;
         #endregion
 
@@ -22,8 +21,6 @@ namespace CityInfo.APIs.Controllers.V2
         public PointsOfInterestController(ILogger<PointsOfInterestController> logger,
             IMediator mediator)
         {
-            _logger = logger ??
-                throw new ArgumentNullException(nameof(logger));
             _mediator = mediator ??
                 throw new ArgumentNullException(nameof(mediator));
         }
@@ -40,13 +37,6 @@ namespace CityInfo.APIs.Controllers.V2
             if (result.Forbid)
                 return Forbid();
 
-            else if (result.CityNotFound)
-            {
-                _logger.LogInformation($"City with id {cityId} wasn't found when accessing points of interest");
-
-                return NotFound("City not found");
-            }
-
             return Ok(result.Items);
 
         }
@@ -55,13 +45,6 @@ namespace CityInfo.APIs.Controllers.V2
         public async Task<ActionResult<PointOfInterestDto>> GetPointOfInterestAsync(int cityId, int pointOfInterestId)
         {
             var result = await _mediator.Send(new GetPointOfInterestQuery(cityId, pointOfInterestId));
-
-            if (result.CityNotFound)
-            {
-                _logger.LogInformation($"City with id {cityId} wasn't found when accessing points of interest");
-
-                return NotFound("City not found");
-            }
 
             if (result.PointOfInterestNotFound)
                 return NotFound("Point of interest not found");

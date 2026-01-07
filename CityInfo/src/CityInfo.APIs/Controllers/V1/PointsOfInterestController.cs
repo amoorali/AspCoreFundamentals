@@ -19,16 +19,13 @@ namespace CityInfo.APIs.Controllers.V1
     public class PointsOfInterestController : ControllerBase
     {
         #region [ Fields ]
-        private readonly ILogger<PointsOfInterestController> _logger;
         private readonly IMediator _mediator;
         #endregion
 
         #region [ Constructor ]
-        public PointsOfInterestController(ILogger<PointsOfInterestController> logger,
+        public PointsOfInterestController(
             IMediator mediator)
         {
-            _logger = logger ??
-                throw new ArgumentNullException(nameof(logger));
             _mediator = mediator ??
                 throw new ArgumentNullException(nameof(mediator));
         }
@@ -45,13 +42,6 @@ namespace CityInfo.APIs.Controllers.V1
             if (result.Forbid)
                 return Forbid();
 
-            else if (result.CityNotFound)
-            {
-                _logger.LogInformation($"City with id {cityId} wasn't found when accessing points of interest");
-
-                return NotFound("City not found");
-            }
-
             return Ok(result.Items);
             
         }
@@ -60,13 +50,6 @@ namespace CityInfo.APIs.Controllers.V1
         public async Task<ActionResult<PointOfInterestDto>> GetPointOfInterestAsync(int cityId, int pointOfInterestId)
         {
             var result = await _mediator.Send(new GetPointOfInterestQuery(cityId, pointOfInterestId));
-
-            if (result.CityNotFound)
-            {
-                _logger.LogInformation($"City with id {cityId} wasn't found when accessing points of interest");
-
-                return NotFound("City not found");
-            }
 
             if (result.PointOfInterestNotFound)
                 return NotFound("Point of interest not found");
@@ -82,9 +65,6 @@ namespace CityInfo.APIs.Controllers.V1
             PointOfInterestForCreationDto pointOfInterest)
         {
             var result = await _mediator.Send(new CreatePointOfInterestCommand(cityId, pointOfInterest));
-
-            if (result.CityNotFound)
-                return NotFound("City not found!");
 
             return CreatedAtRoute("GetPointOfInterest",
                 new
@@ -103,9 +83,6 @@ namespace CityInfo.APIs.Controllers.V1
         {
             var result = await _mediator.Send(new UpdatePointOfInterestCommand(cityId, pointOfInterestId, pointOfInterest));
 
-            if(result.CityNotFound)
-                return NotFound("City not found!");
-
             else if (result.PointOfInterestNotFound)
                 return NotFound($"Point of Interest of city with cityId {cityId} was not found to create!");
 
@@ -119,9 +96,6 @@ namespace CityInfo.APIs.Controllers.V1
             JsonPatchDocument<PointOfInterestForUpdateDto> patchDocument)
         {
             var result = await _mediator.Send(new PatchPointOfInterestCommand(cityId, pointOfInterestId, patchDocument));
-
-            if (result.CityNotFound)
-                return NotFound("City not found!");
 
             if (result.PointOfInterestNotFound)
                 return NotFound($"Point of Interest of city with cityId {cityId} was not found to update!");
@@ -144,9 +118,6 @@ namespace CityInfo.APIs.Controllers.V1
         public async Task<ActionResult> DeletePointOfInterestAsync(int cityId, int pointOfInterestId)
         {
             var result = await _mediator.Send(new DeletePointOfInterestCommand(cityId, pointOfInterestId));
-            
-            if (result.CityNotFound)
-                return NotFound("City not found!");
 
             if (result.PointOfInterestNotFound)
                 return NotFound($"Point of Interest of city with cityId {cityId} was not found to delete!");
