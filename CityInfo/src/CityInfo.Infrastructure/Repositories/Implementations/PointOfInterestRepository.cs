@@ -29,9 +29,14 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
                 .ToListAsync();
         }
 
-        public async Task<bool> PointOfInterestExistsAsync(int pointOfInterestId)
+        public async Task AddPointOfInterestForCityAsync(PointOfInterest pointOfInterest)
         {
-            return await Context.PointsOfInterest.AnyAsync(p => p.Id == pointOfInterestId);
+            await Context.Set<PointOfInterest>().AddAsync(pointOfInterest);
+        }
+
+        public async Task<bool> CityNameMatchesCityIdAsync(string? cityName, int cityId)
+        {
+            return await Context.PointsOfInterest.AnyAsync(p => p.CityId == cityId && p.City!.Name == cityName);
         }
         #endregion
     }

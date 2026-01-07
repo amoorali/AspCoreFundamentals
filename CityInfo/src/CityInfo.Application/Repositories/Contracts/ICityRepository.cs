@@ -7,7 +7,5 @@ namespace CityInfo.Application.Repositories.Contracts
         IQueryable<City> QueryCities();
         Task<City?> GetCityWithPointsOfInterestAsync(int cityId);
         Task<City?> GetCityWithoutPointsOfInterestAsync(int cityId);
-        Task AddPointOfInterestForCityAsync(int cityId, PointOfInterest pointOfInterest);
-        Task<bool> CityNameMatchesCityIdAsync(string? cityName, int cityId);
     }
 }

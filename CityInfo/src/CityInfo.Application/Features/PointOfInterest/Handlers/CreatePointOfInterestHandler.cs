@@ -12,13 +12,16 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
         IRequestHandler<CreatePointOfInterestCommand, CreatePointOfInterestResult>
     {
         #region [ Fields ]
+        private readonly IPointOfInterestRepository _pointOfInterestRepository;
         private readonly IUnitOfWork _unitOfWork;
         #endregion
 
         #region [ Constructor ]
         public CreatePointOfInterestHandler(
+            IPointOfInterestRepository pointOfInterestRepository,
             IUnitOfWork unitOfWork)
         {
+            _pointOfInterestRepository = pointOfInterestRepository;
             _unitOfWork = unitOfWork;
         }
         #endregion
@@ -30,8 +33,9 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
         {
             var entity = request.Dto
                 .Adapt<Domain.Entities.PointOfInterest>();
+            entity.CityId = request.CityId;
 
-            await _cityRepository.AddPointOfInterestForCityAsync(request.CityId, entity);
+            await _pointOfInterestRepository.AddPointOfInterestForCityAsync(entity);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             var createdDto = entity

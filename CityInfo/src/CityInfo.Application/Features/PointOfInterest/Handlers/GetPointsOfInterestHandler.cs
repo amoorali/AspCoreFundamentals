@@ -26,7 +26,7 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
             GetPointsOfInterestQuery request,
             CancellationToken cancellationToken)
         {
-            if (!await _cityRepository.CityNameMatchesCityIdAsync(request.CityName, request.CityId))
+            if (!await _pointOfInterestRepository.CityNameMatchesCityIdAsync(request.CityName, request.CityId))
                 return new GetPointsOfInterestResult(true, null);
 
             var pointsOfInterest = await _pointOfInterestRepository

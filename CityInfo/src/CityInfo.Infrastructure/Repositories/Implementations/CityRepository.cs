@@ -30,22 +30,6 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
             return await Context.Cities
                 .FirstOrDefaultAsync(c => c.Id == cityId);
         }
-
-        public async Task AddPointOfInterestForCityAsync(int cityId, PointOfInterest pointOfInterest)
-        {
-            var city = await GetCityWithoutPointsOfInterestAsync(cityId);
-
-            if (city != null)
-                city.PointsOfInterest.Add(pointOfInterest);
-        }
-
-        #region [ Bool Expression Methods ]
-        public async Task<bool> CityNameMatchesCityIdAsync(string? cityName, int cityId)
-        {
-            return await Context.Cities.AnyAsync(c => c.Id == cityId && c.Name == cityName);
-        }
-        #endregion
-
         #endregion
     }
 }

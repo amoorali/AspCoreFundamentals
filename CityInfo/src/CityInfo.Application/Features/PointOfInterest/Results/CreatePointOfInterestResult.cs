@@ -4,7 +4,7 @@ namespace CityInfo.Application.Features.PointOfInterest.Results
 {
     #region [ Result Record ]
     public record CreatePointOfInterestResult(
-        PointOfInterestDto? Created
+        PointOfInterestDto Created
     );
     #endregion
 }
