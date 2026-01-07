@@ -32,8 +32,18 @@ namespace CityInfo.Application.Features.City.Handlers
             if (!PropertyCheckerService.TypeHasProperties<CityDto>(request.Fields))
                 return new GetCityResult(true, null);
 
-            var entity = await UnitOfWork.Cities
-                .GetCityAsync(request.CityId, request.IncludePointsOfInterest);
+            Domain.Entities.City? entity;
+
+            if (request.IncludePointsOfInterest)
+            {
+                entity = await UnitOfWork.Cities.
+                    GetCityWithPointsOfInterestAsync(request.CityId);
+            }
+            else
+            {
+                entity = await UnitOfWork.Cities
+                    .GetCityWithoutPointsOfInterestAsync(request.CityId);
+            }
 
             if (entity == null)
                 return new GetCityResult(true, null);

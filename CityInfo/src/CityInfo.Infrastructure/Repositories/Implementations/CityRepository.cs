@@ -18,22 +18,22 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
         public IQueryable<City> QueryCities()
             => Context.Cities.AsNoTracking();
 
-        public async Task<City?> GetCityAsync(int cityId, bool includePointsOfInterest)
+        public async Task<City?> GetCityWithPointsOfInterestAsync(int cityId)
         {
-            if (includePointsOfInterest)
-            {
-                return await Context.Cities
-                    .Include(c => c.PointsOfInterest)
-                    .FirstOrDefaultAsync(c => c.Id == cityId);
-            }
+            return await Context.Cities
+                .Include(c => c.PointsOfInterest)
+                .FirstOrDefaultAsync(c => c.Id == cityId);
+        }
 
+        public async Task<City?> GetCityWithoutPointsOfInterestAsync(int cityId)
+        {
             return await Context.Cities
                 .FirstOrDefaultAsync(c => c.Id == cityId);
         }
 
         public async Task AddPointOfInterestForCityAsync(int cityId, PointOfInterest pointOfInterest)
         {
-            var city = await GetCityAsync(cityId, false);
+            var city = await GetCityWithoutPointsOfInterestAsync(cityId);
 
             if (city != null)
                 city.PointsOfInterest.Add(pointOfInterest);
