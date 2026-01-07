@@ -43,6 +43,12 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
         {
             Context.Set<TEntity>().Remove(entity);
         }
+
+        public async Task<bool> ExistsAsync(int id)
+        {
+            return await Context.Set<TEntity>()
+                .FindAsync(new object[] { id }) != null;
+        }
         #endregion
     }
 }

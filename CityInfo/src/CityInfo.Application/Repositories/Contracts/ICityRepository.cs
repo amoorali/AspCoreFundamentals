@@ -1,6 +1,4 @@
-﻿using CityInfo.Application.Common.Helpers;
-using CityInfo.Application.Common.ResourceParameters;
-using CityInfo.Domain.Entities;
+﻿using CityInfo.Domain.Entities;
 
 namespace CityInfo.Application.Repositories.Contracts
 {
@@ -10,7 +8,6 @@ namespace CityInfo.Application.Repositories.Contracts
         Task<City?> GetCityWithPointsOfInterestAsync(int cityId);
         Task<City?> GetCityWithoutPointsOfInterestAsync(int cityId);
         Task AddPointOfInterestForCityAsync(int cityId, PointOfInterest pointOfInterest);
-        Task<bool> CityExistsAsync(int cityId);
         Task<bool> CityNameMatchesCityIdAsync(string? cityName, int cityId);
     }
 }

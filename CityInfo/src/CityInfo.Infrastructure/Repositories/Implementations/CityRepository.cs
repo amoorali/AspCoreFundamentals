@@ -39,11 +39,6 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
                 city.PointsOfInterest.Add(pointOfInterest);
         }
 
-        public async Task<bool> CityExistsAsync(int cityId)
-        {
-            return await Context.Cities.AnyAsync(c => c.Id == cityId);
-        }
-
         #region [ Bool Expression Methods ]
         public async Task<bool> CityNameMatchesCityIdAsync(string? cityName, int cityId)
         {

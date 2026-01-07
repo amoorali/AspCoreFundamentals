@@ -9,5 +9,6 @@ namespace CityInfo.Application.Repositories.Contracts
         Task<IEnumerable<TEntity>?> Find(Expression<Func<TEntity, bool>> predicate);
         Task Add(TEntity entity);
         void Remove(TEntity entity);
+        Task<bool> ExistsAsync(int id);
     }
 }

@@ -28,6 +28,11 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
                 .Where(p => p.CityId == cityId)
                 .ToListAsync();
         }
+
+        public async Task<bool> PointOfInterestExistsAsync(int pointOfInterestId)
+        {
+            return await Context.PointsOfInterest.AnyAsync(p => p.Id == pointOfInterestId);
+        }
         #endregion
     }
 }
