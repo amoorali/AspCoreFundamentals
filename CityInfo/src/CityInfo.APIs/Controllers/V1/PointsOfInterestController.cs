@@ -83,7 +83,7 @@ namespace CityInfo.APIs.Controllers.V1
         {
             var result = await _mediator.Send(new UpdatePointOfInterestCommand(cityId, pointOfInterestId, pointOfInterest));
 
-            else if (result.PointOfInterestNotFound)
+            if (result.PointOfInterestNotFound)
                 return NotFound($"Point of Interest of city with cityId {cityId} was not found to create!");
 
             return NoContent();
