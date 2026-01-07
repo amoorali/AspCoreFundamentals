@@ -10,16 +10,13 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
     public class GetPointOfInterestHandler : IRequestHandler<GetPointOfInterestQuery, GetPointOfInterestResult>
     {
         #region [ Fields ]
-        private readonly ICityRepository _cityRepository;
         private readonly IPointOfInterestRepository _pointOfInterestRepository;
         #endregion
 
         #region [ Constructor ]
         public GetPointOfInterestHandler(
-            ICityRepository cityRepository,
             IPointOfInterestRepository pointOfInterestRepository)
         {
-            _cityRepository = cityRepository;
             _pointOfInterestRepository = pointOfInterestRepository;
         }
         #endregion
@@ -29,19 +26,16 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
             GetPointOfInterestQuery request,
             CancellationToken cancellationToken)
         {
-            if (!await _cityRepository.CityExistsAsync(request.CityId))
-                return new GetPointOfInterestResult(true, true, null);
-
             var pointOfInterest = await _pointOfInterestRepository
                 .GetPointOfInterestForCityAsync(request.CityId, request.PointOfInterestId);
 
             if (pointOfInterest == null)
-                return new GetPointOfInterestResult(false, true, null);
+                return new GetPointOfInterestResult(true, null);
 
             var dto = pointOfInterest
                 .Adapt<PointOfInterestDto>();
 
-            return new GetPointOfInterestResult(false, false, dto);
+            return new GetPointOfInterestResult(false, dto);
         }
         #endregion
     }

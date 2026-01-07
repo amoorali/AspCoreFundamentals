@@ -9,7 +9,6 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
     public class DeletePointOfInterestHandler : IRequestHandler<DeletePointOfInterestCommand, DeletePointOfInterestResult>
     {
         #region [ Fields ]
-        private readonly ICityRepository _cityRepository;
         private readonly IPointOfInterestRepository _pointOfInterestRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMailService _mailService;
@@ -17,12 +16,10 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
 
         #region [ Constructor ]
         public DeletePointOfInterestHandler(
-            ICityRepository cityRepository,
             IPointOfInterestRepository pointOfInterestRepository,
             IUnitOfWork unitOfWork,
             IMailService mailService)
         {
-            _cityRepository = cityRepository;
             _pointOfInterestRepository = pointOfInterestRepository;
             _unitOfWork = unitOfWork;
             _mailService = mailService;
@@ -34,14 +31,11 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
             DeletePointOfInterestCommand request,
             CancellationToken cancellationToken)
         {
-            if (!await _cityRepository.CityExistsAsync(request.CityId))
-                return new DeletePointOfInterestResult(true, true);
-
             var entity = await _pointOfInterestRepository
                 .GetPointOfInterestForCityAsync(request.CityId, request.PointOfInterestId);
 
             if (entity == null)
-                return new DeletePointOfInterestResult(false, true);
+                return new DeletePointOfInterestResult(true);
 
             _pointOfInterestRepository.Remove(entity);
 
@@ -50,7 +44,7 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
             _mailService.Send("Point of interest deleted.",
                 $"Point of interest {entity.Name} with id {entity.Id} was deleted.");
 
-            return new DeletePointOfInterestResult(false, false);
+            return new DeletePointOfInterestResult(false);
         }
         #endregion
     }

@@ -1,4 +1,5 @@
-﻿using CityInfo.Application.DTOs.PointOfInterest;
+﻿using CityInfo.Application.Common.Contracts;
+using CityInfo.Application.DTOs.PointOfInterest;
 using CityInfo.Application.Features.PointOfInterest.Results;
 using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
@@ -10,6 +11,6 @@ namespace CityInfo.Application.Features.PointOfInterest.Commands
         int CityId,
         int PointOfInterestId,
         JsonPatchDocument<PointOfInterestForUpdateDto> PatchDocument
-    ) : IRequest<PatchPointOfInterestResult>;
+    ) : IRequest<PatchPointOfInterestResult>, IRequireExisitingCity;
     #endregion
 }

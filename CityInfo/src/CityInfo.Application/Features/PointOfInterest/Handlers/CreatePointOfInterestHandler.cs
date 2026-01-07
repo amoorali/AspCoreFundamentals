@@ -8,19 +8,17 @@ using MediatR;
 
 namespace CityInfo.Application.Features.PointOfInterest.Handlers
 {
-    public class CreatePointOfInterestHandler : IRequestHandler<CreatePointOfInterestCommand, CreatePointOfInterestResult>
+    public class CreatePointOfInterestHandler :
+        IRequestHandler<CreatePointOfInterestCommand, CreatePointOfInterestResult>
     {
         #region [ Fields ]
-        private readonly ICityRepository _cityRepository;
         private readonly IUnitOfWork _unitOfWork;
         #endregion
 
         #region [ Constructor ]
         public CreatePointOfInterestHandler(
-            ICityRepository cityRepository,
             IUnitOfWork unitOfWork)
         {
-            _cityRepository = cityRepository;
             _unitOfWork = unitOfWork;
         }
         #endregion
@@ -30,9 +28,6 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
             CreatePointOfInterestCommand request,
             CancellationToken cancellationToken)
         {
-            if (!await _cityRepository.CityExistsAsync(request.CityId))
-                return new CreatePointOfInterestResult(true, null);
-
             var entity = request.Dto
                 .Adapt<Domain.Entities.PointOfInterest>();
 
@@ -42,7 +37,7 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
             var createdDto = entity
                 .Adapt<PointOfInterestDto>();
 
-            return new CreatePointOfInterestResult(false, createdDto);
+            return new CreatePointOfInterestResult(createdDto);
         }
         #endregion
     }
