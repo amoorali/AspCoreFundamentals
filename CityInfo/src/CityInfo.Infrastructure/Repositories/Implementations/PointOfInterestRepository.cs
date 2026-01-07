@@ -28,11 +28,6 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
                 .Where(p => p.CityId == cityId)
                 .ToListAsync();
         }
-
-        public void DeletePointOfInterest(PointOfInterest pointOfInterest)
-        {
-            Context.PointsOfInterest.Remove(pointOfInterest);
-        }
         #endregion
     }
 }

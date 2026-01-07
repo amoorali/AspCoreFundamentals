@@ -35,7 +35,7 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
             if (entity == null)
                 return new DeletePointOfInterestResult(false, true);
 
-            UnitOfWork.PointsOfInterest.DeletePointOfInterest(entity);
+            UnitOfWork.PointsOfInterest.Remove(entity);
 
             await UnitOfWork.SaveChangesAsync(cancellationToken);
 

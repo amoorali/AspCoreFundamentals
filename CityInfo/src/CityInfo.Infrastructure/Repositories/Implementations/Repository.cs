@@ -1,10 +1,11 @@
-﻿using CityInfo.Infrastructure.DbContexts;
+﻿using CityInfo.Application.Repositories.Contracts;
+using CityInfo.Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace CityInfo.Infrastructure.Repositories.Implementations
 {
-    public class Repository<TEntity> where TEntity : class
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         #region [ Fields ]
         protected readonly CityInfoContext Context;
@@ -38,9 +39,9 @@ namespace CityInfo.Infrastructure.Repositories.Implementations
             await Context.Set<TEntity>().AddAsync(entity);
         }
 
-        public async Task Remove(TEntity entity)
+        public void Remove(TEntity entity)
         {
-            await Context.Set<TEntity>().AddAsync(entity);
+            Context.Set<TEntity>().Remove(entity);
         }
         #endregion
     }
