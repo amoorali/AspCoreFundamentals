@@ -103,6 +103,22 @@ namespace CityInfo.APIs.Extensions
         }
         #endregion
 
+        #region [ ExceptionHandler ]
+        public static void ExceptionHandlerConfiguration(this IApplicationBuilder app)
+        {
+            app.UseExceptionHandler(new ExceptionHandlerOptions
+            {
+                StatusCodeSelector = ex => ex switch
+                {
+                    NotFoundException => StatusCodes.Status404NotFound,
+                    BadRequestException => StatusCodes.Status400BadRequest,
+                    ValidationException => StatusCodes.Status400BadRequest,
+                    _ => StatusCodes.Status500InternalServerError
+                }
+            });
+        }
+        #endregion
+
         #region [ Other Services ]
         public static void ConfigureServices(this IServiceCollection services)
         {
@@ -117,12 +133,12 @@ namespace CityInfo.APIs.Extensions
                     problem.Instance =
                         $"{context.HttpContext.Request.Method} {context.HttpContext.Request.Path}";
 
-                    if (problem is HttpValidationProblemDetails ||
-                        context.Exception is ValidationException)
+                    if (problem is HttpValidationProblemDetails)
                     {
-                        ProblemDetailsHelpers.ApplyValidationDefaults(
-                            context.HttpContext,
-                            problem);
+                        problem.Type = "Model Validation Problem";
+                        problem.Status = StatusCodes.Status422UnprocessableEntity;
+                        problem.Title = "One or more validation errors occured.";
+                        problem.Detail = "See the errors field for details";
                     }
 
                     if (context.Exception is ValidationException validationException)
@@ -137,7 +153,6 @@ namespace CityInfo.APIs.Extensions
 
                     if (context.Exception is NotFoundException notFound)
                     {
-                        context.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
                         problem.Status = StatusCodes.Status404NotFound;
                         problem.Title = "Not Found";
                         problem.Detail = notFound.Message;
@@ -145,7 +160,6 @@ namespace CityInfo.APIs.Extensions
 
                     if (context.Exception is BadRequestException badRequest)
                     {
-                        context.HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
                         problem.Status = StatusCodes.Status400BadRequest;
                         problem.Title = "Bad Request";
                         problem.Detail = badRequest.Message;

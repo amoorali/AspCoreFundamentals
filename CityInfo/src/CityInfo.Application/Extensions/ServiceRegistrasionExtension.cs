@@ -11,7 +11,6 @@ namespace CityInfo.Application.Extensions
         {
             #region [ Mapster ]
             TypeAdapterConfig.GlobalSettings.Scan(typeof(ServiceRegistrasionExtension).Assembly);
-            TypeAdapterConfig.GlobalSettings.Compile();
             #endregion
 
             #region [ MediatR ]
