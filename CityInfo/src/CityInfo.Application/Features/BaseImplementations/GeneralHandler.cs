@@ -1,5 +1,4 @@
 ﻿using CityInfo.Application.Services.Contracts;
-using MapsterMapper;
 
 namespace CityInfo.Application.Features.BaseImplementations
 {
@@ -7,7 +6,6 @@ namespace CityInfo.Application.Features.BaseImplementations
     {
         #region [ Fields ]
         protected readonly IUnitOfWork UnitOfWork;
-        protected readonly IMapper Mapper;
         protected readonly IMailService MailService;
         protected readonly IPropertyCheckerService PropertyCheckerService;
         protected readonly IPropertyMappingService PropertyMappingService;
@@ -16,15 +14,12 @@ namespace CityInfo.Application.Features.BaseImplementations
         #region [ Constructor ]
         public GeneralHandler(
             IUnitOfWork unitOfWork,
-            IMapper mapper,
             IMailService mailService,
             IPropertyCheckerService propertyCheckerService,
             IPropertyMappingService propertyMappingService)
         {
             UnitOfWork = unitOfWork ??
                 throw new ArgumentNullException(nameof(unitOfWork));
-            Mapper = mapper ??
-                throw new ArgumentNullException(nameof(mapper));
             MailService = mailService ??
                 throw new ArgumentNullException(nameof(mailService));
             PropertyCheckerService = propertyCheckerService ??

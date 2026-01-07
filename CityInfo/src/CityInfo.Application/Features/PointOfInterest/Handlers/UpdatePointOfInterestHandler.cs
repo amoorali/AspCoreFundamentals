@@ -2,7 +2,7 @@
 using CityInfo.Application.Features.PointOfInterest.Commands;
 using CityInfo.Application.Features.PointOfInterest.Results;
 using CityInfo.Application.Services.Contracts;
-using MapsterMapper;
+using Mapster;
 using MediatR;
 
 namespace CityInfo.Application.Features.PointOfInterest.Handlers
@@ -13,10 +13,9 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
         #region [ Constructor ]
         public UpdatePointOfInterestHandler(
             IUnitOfWork unitOfWork,
-            IMapper mapper,
             IMailService mailService,
             IPropertyCheckerService propertyCheckerService)
-            : base(unitOfWork, mapper, mailService, propertyCheckerService)
+            : base(unitOfWork, mailService, propertyCheckerService)
         {
         }
         #endregion
@@ -35,7 +34,7 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
             if (entity == null)
                 return new UpdatePointOfInterestResult(false, true);
 
-            Mapper.Map(request.Dto, entity);
+            request.Dto.Adapt(entity);
 
             await UnitOfWork.SaveChangesAsync(cancellationToken);
 

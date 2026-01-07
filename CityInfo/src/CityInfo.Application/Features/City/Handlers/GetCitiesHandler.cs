@@ -6,7 +6,7 @@ using CityInfo.Application.Features.BaseImplementations;
 using CityInfo.Application.Features.City.Queries;
 using CityInfo.Application.Features.City.Results;
 using CityInfo.Application.Services.Contracts;
-using MapsterMapper;
+using Mapster;
 using MediatR;
 
 namespace CityInfo.Application.Features.City.Handlers
@@ -17,11 +17,10 @@ namespace CityInfo.Application.Features.City.Handlers
         #region [ Constructor ]
         public GetCitiesHandler(
             IUnitOfWork unitOfWork,
-            IMapper mapper,
             IMailService mailService,
             IPropertyCheckerService propertyCheckerService,
             IPropertyMappingService propertyMappingService)
-            : base(unitOfWork, mapper, mailService, propertyCheckerService, propertyMappingService)
+            : base(unitOfWork, mailService, propertyCheckerService, propertyMappingService)
         {
         }
         #endregion
@@ -85,8 +84,9 @@ namespace CityInfo.Application.Features.City.Handlers
                 pagedEntities.CurrentPage,
                 pagedEntities.TotalPages);
 
-            var dtos = Mapper.Map<IEnumerable<CityWithoutPointsOfInterestDto>>(pagedEntities.Items)
-                             .ShapeData(parameters.Fields);
+            var dtos = pagedEntities.Items
+                .Adapt<IEnumerable<CityWithoutPointsOfInterestDto>>()
+                .ShapeData(parameters.Fields);
 
             return new GetCitiesResult(
                 dtos,

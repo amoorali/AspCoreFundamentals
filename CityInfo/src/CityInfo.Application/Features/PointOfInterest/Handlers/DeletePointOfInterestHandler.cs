@@ -2,7 +2,6 @@
 using CityInfo.Application.Features.PointOfInterest.Commands;
 using CityInfo.Application.Features.PointOfInterest.Results;
 using CityInfo.Application.Services.Contracts;
-using MapsterMapper;
 using MediatR;
 
 namespace CityInfo.Application.Features.PointOfInterest.Handlers
@@ -13,10 +12,9 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
         #region [ Constructor ]
         public DeletePointOfInterestHandler(
             IUnitOfWork unitOfWork,
-            IMapper mapper,
             IMailService mailService,
             IPropertyCheckerService propertyCheckerService)
-            : base(unitOfWork, mapper, mailService, propertyCheckerService)
+            : base(unitOfWork, mailService, propertyCheckerService)
         {
         }
         #endregion

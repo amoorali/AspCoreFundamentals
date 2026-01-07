@@ -4,7 +4,7 @@ using CityInfo.Application.Features.BaseImplementations;
 using CityInfo.Application.Features.City.Queries;
 using CityInfo.Application.Features.City.Results;
 using CityInfo.Application.Services.Contracts;
-using MapsterMapper;
+using Mapster;
 using MediatR;
 
 namespace CityInfo.Application.Features.City.Handlers
@@ -15,11 +15,10 @@ namespace CityInfo.Application.Features.City.Handlers
         #region [ Constructor ]
         public GetCityHandler(
             IUnitOfWork unitOfWork,
-            IMapper mapper,
             IMailService mailService,
             IPropertyCheckerService propertyCheckerService,
             IPropertyMappingService propertyMappingService)
-            : base(unitOfWork, mapper, mailService, propertyCheckerService, propertyMappingService)
+            : base(unitOfWork, mailService, propertyCheckerService, propertyMappingService)
         {
         }
         #endregion
@@ -50,12 +49,15 @@ namespace CityInfo.Application.Features.City.Handlers
 
             if (request.IncludePointsOfInterest)
             {
-                var dtoWithPointsOfInterest = Mapper.Map<CityDto>(entity)
+                var dtoWithPointsOfInterest = entity
+                    .Adapt<CityDto>()
                     .ShapeData(request.Fields);
+
                 return new GetCityResult(false, dtoWithPointsOfInterest);
             }
 
-            var dtoWithoutPointsOfInterest = Mapper.Map<CityWithoutPointsOfInterestDto>(entity)
+            var dtoWithoutPointsOfInterest = entity
+                .Adapt<CityWithoutPointsOfInterestDto>()
                 .ShapeData(request.Fields);
 
             return new GetCityResult(false, dtoWithoutPointsOfInterest);

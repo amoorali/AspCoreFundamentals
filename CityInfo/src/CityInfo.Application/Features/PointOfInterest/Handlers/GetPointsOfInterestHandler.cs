@@ -3,7 +3,7 @@ using CityInfo.Application.Features.BaseImplementations;
 using CityInfo.Application.Features.PointOfInterest.Queries;
 using CityInfo.Application.Features.PointOfInterest.Results;
 using CityInfo.Application.Services.Contracts;
-using MapsterMapper;
+using Mapster;
 using MediatR;
 
 namespace CityInfo.Application.Features.PointOfInterest.Handlers
@@ -14,10 +14,9 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
         #region [ Constructor ]
         public GetPointsOfInterestHandler(
             IUnitOfWork unitOfWork,
-            IMapper mapper,
             IMailService mailService,
             IPropertyCheckerService propertyCheckerService)
-            : base(unitOfWork, mapper, mailService, propertyCheckerService)
+            : base(unitOfWork, mailService, propertyCheckerService)
         {
         }
         #endregion
@@ -36,7 +35,8 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
             var pointsOfInterest = await UnitOfWork.PointsOfInterest
                 .GetPointsOfInterestForCityAsync(request.CityId);
 
-            var entities = Mapper.Map<IReadOnlyList<PointOfInterestDto>>(pointsOfInterest);
+            var entities = pointsOfInterest
+                .Adapt<IReadOnlyList<PointOfInterestDto>>();
 
             return new GetPointsOfInterestResult(false, false, entities);
         }

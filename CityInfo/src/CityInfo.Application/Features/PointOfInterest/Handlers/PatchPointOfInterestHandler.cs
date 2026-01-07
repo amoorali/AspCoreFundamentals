@@ -4,7 +4,7 @@ using CityInfo.Application.Features.PointOfInterest.Commands;
 using CityInfo.Application.Features.PointOfInterest.Results;
 using CityInfo.Application.Services.Contracts;
 using FluentValidation;
-using MapsterMapper;
+using Mapster;
 using MediatR;
 
 namespace CityInfo.Application.Features.PointOfInterest.Handlers
@@ -19,11 +19,10 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
         #region [ Constructor ]
         public PatchPointOfInterestHandler(
             IUnitOfWork unitOfWork,
-            IMapper mapper,
             IMailService mailService,
             IPropertyCheckerService propertyCheckerService,
             IValidator<PointOfInterestForUpdateDto> validator)
-            : base(unitOfWork, mapper, mailService, propertyCheckerService)
+            : base(unitOfWork, mailService, propertyCheckerService)
         {
             _validator = validator;
         }
@@ -43,7 +42,8 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
             if (entity == null)
                 return new PatchPointOfInterestResult(false, true, null, null);
 
-            var dtoToPatch = Mapper.Map<PointOfInterestForUpdateDto>(entity);
+            var dtoToPatch = entity
+                .Adapt<PointOfInterestForUpdateDto>();
 
             var patchErrors = new Dictionary<string, string>();
 
@@ -68,8 +68,8 @@ namespace CityInfo.Application.Features.PointOfInterest.Handlers
 
                 return new PatchPointOfInterestResult(false, false, null, errors);
             }
-
-            Mapper.Map(dtoToPatch, entity);
+            
+            dtoToPatch.Adapt(entity);
 
             await UnitOfWork.SaveChangesAsync(cancellationToken);
 

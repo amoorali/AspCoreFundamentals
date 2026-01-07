@@ -8,11 +8,8 @@ namespace CityInfo.Application.Extensions
         public static void ConfigureApplicationLayer(this IServiceCollection services)
         {
             #region [ Mapster ]
-            var config = new TypeAdapterConfig();
-
-            config.Scan(typeof(ServiceRegistrasionExtension).Assembly);
-
-            services.AddMapster();
+            TypeAdapterConfig.GlobalSettings.Scan(typeof(ServiceRegistrasionExtension).Assembly);
+            TypeAdapterConfig.GlobalSettings.Compile();
             #endregion
 
             #region [ MediatR ]
