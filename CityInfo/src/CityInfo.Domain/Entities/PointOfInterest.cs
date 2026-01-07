@@ -24,9 +24,10 @@ namespace CityInfo.Domain.Entities
         #endregion
 
         #region [ Constructure ]
-        public PointOfInterest(string name)
+        public PointOfInterest(string name, string? description = "")
         {
             Name = name;
+            Description = description;
         }
         #endregion
     }

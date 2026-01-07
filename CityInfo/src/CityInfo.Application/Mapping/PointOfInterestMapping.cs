@@ -18,8 +18,7 @@ namespace CityInfo.Application.Mapping
 
             #region [ Map PointOfInterestForCreationDto to PointOfInterest ]
             config.NewConfig<PointOfInterestForCreationDto, PointOfInterest>()
-                .Map(dest => dest.Name, src => src.Name)
-                .Map(dest => dest.Description, src => src.Description);
+                .ConstructUsing(src => new PointOfInterest(src.Name, src.Description));
             #endregion
 
             #region [ Map PointOfInterestForUpdateDto to PointOfInterest (TwoWays) ]
