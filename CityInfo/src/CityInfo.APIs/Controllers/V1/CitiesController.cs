@@ -134,9 +134,9 @@ namespace CityInfo.APIs.Controllers.V1
         /// <summary>
         /// Get a city by id
         /// </summary>
-        /// <param name="cityId">The id of the city to get</param>
+        ///<param name="cityId">The id of the city to get</param>
         /// <param name="includePointsOfInterest">Whether or not to include the points of interest</param>
-        /// <param name="fields">Specify the fields to retrieve</param>
+        /// <param name="citiesResourceParameters">The resource parameters for city to query</param>
         /// <returns>A city with or without points of interest</returns>
         /// <response code="200">Returns the requested city</response>
         /// <response code="404"></response>
@@ -147,10 +147,15 @@ namespace CityInfo.APIs.Controllers.V1
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetCityAsync(
             int cityId,
-            string? fields,
-            bool includePointsOfInterest = false)
+            bool includePointsOfInterest,
+            [FromQuery] CitiesResourceParameters citiesResourceParameters)
         {
-            var result = await _mediator.Send(new GetCityQuery(cityId, includePointsOfInterest, fields));
+
+
+            var result = await _mediator.Send(new GetCityQuery(
+                cityId,
+                includePointsOfInterest,
+                citiesResourceParameters.Fields));
 
             if (result.NotFound)
                 return NotFound("The id isn't in the collection");
