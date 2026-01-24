@@ -5,7 +5,7 @@ namespace CityInfo.Application.Features.City.Results
     #region [ Result Record ]
     public record GetCityResult(
         bool NotFound,
-        ExpandoObject? Item
+        IDictionary<string, object?>? LinkedResources
     );
     #endregion
 }

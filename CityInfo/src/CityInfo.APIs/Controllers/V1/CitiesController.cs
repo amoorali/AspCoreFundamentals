@@ -151,16 +151,18 @@ namespace CityInfo.APIs.Controllers.V1
             [FromQuery] CitiesResourceParameters citiesResourceParameters)
         {
 
+            var links = CreateLinksForCity(cityId, citiesResourceParameters.Fields);
 
             var result = await _mediator.Send(new GetCityQuery(
                 cityId,
                 includePointsOfInterest,
-                citiesResourceParameters.Fields));
+                citiesResourceParameters.Fields,
+                links));
 
             if (result.NotFound)
                 return NotFound("The id isn't in the collection");
 
-            return Ok(result.Item);
+            return Ok(result.LinkedResources);
         }
         #endregion
     }

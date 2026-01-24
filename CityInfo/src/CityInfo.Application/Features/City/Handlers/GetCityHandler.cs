@@ -50,20 +50,24 @@ namespace CityInfo.Application.Features.City.Handlers
             if (entity == null)
                 return new GetCityResult(true, null);
 
+            IDictionary<string, object?> linkedResources;
+
             if (request.IncludePointsOfInterest)
             {
-                var dtoWithPointsOfInterest = entity
+                linkedResources = entity
                     .Adapt<CityDto>()
                     .ShapeData(request.Fields);
-
-                return new GetCityResult(false, dtoWithPointsOfInterest);
+            }
+            else
+            {
+                linkedResources = entity
+                    .Adapt<CityWithoutPointsOfInterestDto>()
+                    .ShapeData(request.Fields);
             }
 
-            var dtoWithoutPointsOfInterest = entity
-                .Adapt<CityWithoutPointsOfInterestDto>()
-                .ShapeData(request.Fields);
+            linkedResources.Add("links", request.Links);
 
-            return new GetCityResult(false, dtoWithoutPointsOfInterest);
+            return new GetCityResult(false, linkedResources);
         }
         #endregion
     }
