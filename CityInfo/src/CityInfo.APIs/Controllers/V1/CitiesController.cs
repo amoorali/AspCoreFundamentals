@@ -60,6 +60,7 @@ namespace CityInfo.APIs.Controllers.V1
                             name = citiesResourceParameters.Name,
                             searchQuery = citiesResourceParameters.SearchQuery
                         });
+                case ResourceUriType.Current:
                 default:
                     return Url.Link("GetCitiesAsync",
                         new
@@ -72,6 +73,21 @@ namespace CityInfo.APIs.Controllers.V1
                             searchQuery = citiesResourceParameters.SearchQuery
                         });
             }
+        }
+
+        private IEnumerable<LinkDto> CreateLinksForCities(
+            CitiesResourceParameters citiesResourceParameters)
+        {
+            var links = new List<LinkDto>();
+
+            links.Add(
+                new(CreateCitiesResourceUri(citiesResourceParameters, ResourceUriType.Current),
+                "self",
+                "GET"));
+
+            throw new NotImplementedException();
+
+            return links;
         }
 
         private IEnumerable<LinkDto> CreateLinksForCity(int cityId, string? fields)
