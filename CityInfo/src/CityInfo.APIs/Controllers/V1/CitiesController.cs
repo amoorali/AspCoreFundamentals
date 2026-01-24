@@ -1,8 +1,11 @@
 ﻿using Asp.Versioning;
 using CityInfo.Application.Common.Helpers;
 using CityInfo.Application.Common.ResourceParameters;
+using CityInfo.Application.DTOs.City;
 using CityInfo.Application.DTOs.Link;
+using CityInfo.Application.Features.City.Commands;
 using CityInfo.Application.Features.City.Queries;
+using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -163,6 +166,23 @@ namespace CityInfo.APIs.Controllers.V1
                 return NotFound("The id isn't in the collection");
 
             return Ok(result.LinkedResources);
+        }
+        #endregion
+
+        #region [ POST Methods ]
+        [HttpPost]
+        public async Task<IActionResult> CreateCityAsync(
+            CityForCreationDto city)
+        {
+            throw new NotImplementedException();
+
+            var links = CreateLinksForCity(1, null);
+
+            var result = await _mediator.Send(new CreateCityCommand(city, links));
+
+            return CreatedAtRoute("GetCityAsync",
+                new { cityId = result.LinkedResources!["Id"] },
+                result.LinkedResources);
         }
         #endregion
     }
