@@ -1,4 +1,5 @@
-﻿using CityInfo.Application.Repositories.Contracts;
+﻿using CityInfo.Application.Common.Contracts;
+using CityInfo.Application.Repositories.Contracts;
 using CityInfo.Application.Services.Contracts;
 using CityInfo.Infrastructure.DbContexts;
 using CityInfo.Infrastructure.Repositories.Implementations;
@@ -41,6 +42,8 @@ namespace CityInfo.Infrastructure.Extensions
             #region [ Other Services ]
             services.AddTransient<IPropertyCheckerService, PropertyCheckerService>();
             services.AddTransient<IPropertyMappingService, PropertyMappingService>();
+            services.AddHttpContextAccessor();
+            services.AddScoped<ICityLinkService, CityLinkService>();
             #endregion
         }
     }
