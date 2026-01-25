@@ -6,7 +6,8 @@ namespace CityInfo.Application.Features.City.Queries
 {
     #region [ Query Record ]
     public record GetCitiesQuery(
-        CitiesResourceParameters CitiesResourceParameters
+        CitiesResourceParameters CitiesResourceParameters,
+        string? MediaType
     ) : IRequest<GetCitiesResult>;
     #endregion
 }

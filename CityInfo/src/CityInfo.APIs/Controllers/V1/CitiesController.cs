@@ -1,8 +1,6 @@
 ﻿using Asp.Versioning;
-using CityInfo.Application.Common.Helpers;
 using CityInfo.Application.Common.ResourceParameters;
 using CityInfo.Application.DTOs.City;
-using CityInfo.Application.DTOs.Link;
 using CityInfo.Application.Features.City.Commands;
 using CityInfo.Application.Features.City.Queries;
 using Mapster;
@@ -31,123 +29,21 @@ namespace CityInfo.APIs.Controllers.V1
         }
         #endregion
 
-        #region [ Private Methods ]
-        private string? CreateCitiesResourceUri(
-            CitiesResourceParameters citiesResourceParameters,
-            ResourceUriType type)
-        {
-            switch (type)
-            {
-                case ResourceUriType.PreviousPage:
-                    return Url.Link("GetCitiesAsync",
-                        new
-                        {
-                            orderBy = citiesResourceParameters.OrderBy,
-                            fields = citiesResourceParameters.Fields,
-                            pageNumber = citiesResourceParameters.PageNumber - 1,
-                            pageSize = citiesResourceParameters.PageSize,
-                            name = citiesResourceParameters.Name,
-                            searchQuery = citiesResourceParameters.SearchQuery
-                        });
-                case ResourceUriType.NextPage:
-                    return Url.Link("GetCitiesAsync",
-                        new
-                        {
-                            orderBy = citiesResourceParameters.OrderBy,
-                            fields = citiesResourceParameters.Fields,
-                            pageNumber = citiesResourceParameters.PageNumber + 1,
-                            pageSize = citiesResourceParameters.PageSize,
-                            name = citiesResourceParameters.Name,
-                            searchQuery = citiesResourceParameters.SearchQuery
-                        });
-                case ResourceUriType.Current:
-                default:
-                    return Url.Link("GetCitiesAsync",
-                        new
-                        {
-                            orderBy = citiesResourceParameters.OrderBy,
-                            fields = citiesResourceParameters.Fields,
-                            pageNumber = citiesResourceParameters.PageNumber + 1,
-                            pageSize = citiesResourceParameters.PageSize,
-                            name = citiesResourceParameters.Name,
-                            searchQuery = citiesResourceParameters.SearchQuery
-                        });
-            }
-        }
-
-        private IEnumerable<LinkDto> CreateLinksForCities(
-            CitiesResourceParameters citiesResourceParameters)
-        {
-            var links = new List<LinkDto>();
-
-            links.Add(
-                new(CreateCitiesResourceUri(citiesResourceParameters, ResourceUriType.Current),
-                "self",
-                "GET"));
-
-            throw new NotImplementedException();
-
-            return links;
-        }
-
-        private IEnumerable<LinkDto> CreateLinksForCity(int cityId, string? fields)
-        {
-            var links = new List<LinkDto>();
-
-            if (string.IsNullOrWhiteSpace(fields))
-            {
-                links.Add(
-                    new(Url.Link("GetCityAsync", new { cityId }),
-                    "self",
-                    "GET"));
-            }
-            else
-            {
-                links.Add(
-                    new(Url.Link("GetCityAsync", new { cityId, fields }),
-                    "self",
-                    "GET"));
-            }
-
-            links.Add(
-                new(Url.Link("CreatePointOfInterestAsync", new { cityId }),
-                "create_pointofinterest_for_city",
-                "POST"));
-
-            links.Add(
-                new(Url.Link("GetPointsOfInterestAsync", new { cityId }),
-                "pointsofinterest",
-                "GET"));
-
-            return links;
-        }
-        #endregion
-
         #region [ GET Methods ]
         [HttpGet(Name = "GetCitiesAsync")]
         [HttpHead]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> GetCitiesAsync(
-            [FromQuery] CitiesResourceParameters citiesResourceParameters)
+            [FromQuery] CitiesResourceParameters citiesResourceParameters,
+            [FromHeader(Name = "Accept")] string? mediaType)
         {
-            var result = await _mediator.Send(new GetCitiesQuery(citiesResourceParameters));
-
-            var previousPageLink = result.HasPreviousPage
-                ? CreateCitiesResourceUri(
-                    citiesResourceParameters,
-                    ResourceUriType.PreviousPage) : null;
-
-            var nextPageLink = result.HasNextPage
-                ? CreateCitiesResourceUri(
-                    citiesResourceParameters,
-                    ResourceUriType.NextPage) : null;
-
-            result.PaginationMetadata.PreviousPageLink = previousPageLink;
-            result.PaginationMetadata.NextPageLink = nextPageLink;
+            var result = await _mediator.Send(new GetCitiesQuery(citiesResourceParameters, mediaType));
 
             Response.Headers.Append("X-Pagination",
                 JsonSerializer.Serialize(result.PaginationMetadata));
 
-            return Ok(result.Items);
+            return Ok(result.Item);
         }
 
         /// <summary>
@@ -171,13 +67,10 @@ namespace CityInfo.APIs.Controllers.V1
             string? fields,
             [FromHeader(Name = "Accept")] string? mediaType)
         {
-            var links = CreateLinksForCity(cityId, fields);
-
             var result = await _mediator.Send(new GetCityQuery(
                 cityId,
                 includePointsOfInterest,
                 fields,
-                links,
                 mediaType));
 
             if (result.NotFound)
@@ -188,19 +81,16 @@ namespace CityInfo.APIs.Controllers.V1
         #endregion
 
         #region [ POST Methods ]
-        [HttpPost]
+        [HttpPost(Name = "CreateCityAsync")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateCityAsync(
-            CityForCreationDto city)
+            CityForCreationDto city,
+            string? mediaType)
         {
-            throw new NotImplementedException();
+            var result = await _mediator.Send(new CreateCityCommand(city, mediaType));
 
-            var links = CreateLinksForCity(1, null);
-
-            var result = await _mediator.Send(new CreateCityCommand(city, links));
-
-            return CreatedAtRoute("GetCityAsync",
-                new { cityId = result.LinkedResources!["Id"] },
-                result.LinkedResources);
+            return CreatedAtRoute("GetCityAsync", result.Item);
         }
         #endregion
     }

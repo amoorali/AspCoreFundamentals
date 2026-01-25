@@ -2,7 +2,7 @@
 {
     #region [ Result Record ]
     public record CreateCityResult(
-        IDictionary<string, object?>? LinkedResources
+        object? Item
     );
     #endregion
 }

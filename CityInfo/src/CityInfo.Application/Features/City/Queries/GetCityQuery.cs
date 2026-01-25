@@ -1,5 +1,4 @@
-﻿using CityInfo.Application.DTOs.Link;
-using CityInfo.Application.Features.City.Results;
+﻿using CityInfo.Application.Features.City.Results;
 using MediatR;
 
 namespace CityInfo.Application.Features.City.Queries
@@ -9,7 +8,6 @@ namespace CityInfo.Application.Features.City.Queries
         int CityId,
         bool IncludePointsOfInterest,
         string? Fields,
-        IEnumerable<LinkDto> Links,
         string? MediaType
     ) : IRequest<GetCityResult>;
     #endregion

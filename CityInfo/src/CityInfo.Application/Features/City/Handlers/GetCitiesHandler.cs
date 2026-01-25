@@ -1,13 +1,17 @@
 ﻿using CityInfo.Application.Common;
+using CityInfo.Application.Common.Contracts;
 using CityInfo.Application.Common.Exceptions;
 using CityInfo.Application.Common.Helpers;
+using CityInfo.Application.Common.ResourceParameters;
 using CityInfo.Application.DTOs.City;
+using CityInfo.Application.DTOs.Link;
 using CityInfo.Application.Features.City.Queries;
 using CityInfo.Application.Features.City.Results;
 using CityInfo.Application.Repositories.Contracts;
 using CityInfo.Application.Services.Contracts;
 using Mapster;
 using MediatR;
+using System.Net.Http.Headers;
 
 namespace CityInfo.Application.Features.City.Handlers
 {
@@ -17,17 +21,20 @@ namespace CityInfo.Application.Features.City.Handlers
         private readonly ICityRepository _cityRepository;
         private readonly IPropertyCheckerService _propertyCheckerService;
         private readonly IPropertyMappingService _propertyMappingService;
+        private readonly ICityLinkService _cityLinkService;
         #endregion
 
         #region [ Constructor ]
         public GetCitiesHandler(
             ICityRepository cityRepository,
             IPropertyCheckerService propertyCheckerService,
-            IPropertyMappingService propertyMappingService)
+            IPropertyMappingService propertyMappingService,
+            ICityLinkService cityLinkService)
         {
             _cityRepository = cityRepository;
             _propertyCheckerService = propertyCheckerService;
             _propertyMappingService = propertyMappingService;
+            _cityLinkService = cityLinkService;
         }
         #endregion
 
@@ -49,6 +56,9 @@ namespace CityInfo.Application.Features.City.Handlers
             {
                 throw new BadRequestException("No cities found");
             }
+
+            if (!MediaTypeHeaderValue.TryParse(request.MediaType, out var parsedMediaType))
+                throw new BadRequestException("Accept header media type value is not a valid media type.");
 
             var query = _cityRepository.QueryCities();
 
@@ -94,11 +104,21 @@ namespace CityInfo.Application.Features.City.Handlers
                 .Adapt<IEnumerable<CityWithoutPointsOfInterestDto>>()
                 .ShapeData(parameters.Fields);
 
-            return new GetCitiesResult(
-                dtos,
-                pagedEntities.HasPrevious,
-                pagedEntities.HasNext,
-                paginationMetadata);
+            if (parsedMediaType.MediaType!.Equals("application/vnd.marvin.hateoas+json",
+                StringComparison.OrdinalIgnoreCase))
+            {
+                var linkedResources = (IDictionary<string, object?>)dtos;
+
+                var links = _cityLinkService.CreateLinksForCities(request.CitiesResourceParameters,
+                    pagedEntities.HasNext,
+                    pagedEntities.HasPrevious);
+
+                linkedResources.Add("links", links);
+
+                return new GetCitiesResult(Item: linkedResources, paginationMetadata);
+            }
+
+            return new GetCitiesResult(Item: dtos, paginationMetadata);
         }
         #endregion
     }
