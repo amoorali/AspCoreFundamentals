@@ -86,7 +86,7 @@ namespace CityInfo.APIs.Controllers.V1
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateCityAsync(
             CityForCreationDto city,
-            string? mediaType)
+            [FromHeader(Name = "Accept")] string? mediaType)
         {
             var result = await _mediator.Send(new CreateCityCommand(city, mediaType));
 
